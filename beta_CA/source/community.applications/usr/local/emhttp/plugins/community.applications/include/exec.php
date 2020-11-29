@@ -1450,6 +1450,7 @@ function displayRepositories() {
 		$templates = readJsonFile($caPaths['community-templates-info']);
 	}
 	$allRepos = array();
+	$bio = array();
 	foreach ($templates as $template) {
 		$repoName = $template['RepoName'];
 		if ( $repoName == $caSettings['favourite'] ) {
@@ -1458,13 +1459,23 @@ function displayRepositories() {
 			$fav['RepoName'] = $repoName;
 			$fav['SortName'] = $repoName;
 		} else {
-			$allRepos[$repoName] = $repositories[$repoName];
-			$allRepos[$repoName]['RepositoryTemplate'] = true;
-			$allRepos[$repoName]['RepoName'] = $repoName;
-			$allRepos[$repoName]['SortName'] = $repoName;
+			if ( $repositories[$repoName]['bio'] ) {
+				$bio[$repoName] = $repositories[$repoName];
+				$bio[$repoName] = $repositories[$repoName];
+				$bio[$repoName]['RepositoryTemplate'] = true;
+				$bio[$repoName]['RepoName'] = $repoName;
+				$bio[$repoName]['SortName'] = $repoName;
+			} else {
+				$allRepos[$repoName] = $repositories[$repoName];
+				$allRepos[$repoName]['RepositoryTemplate'] = true;
+				$allRepos[$repoName]['RepoName'] = $repoName;
+				$allRepos[$repoName]['SortName'] = $repoName;
+			}
 		}
 	}
+	usort($bio,"mySort");
 	usort($allRepos,"mySort");
+	$allRepos = array_merge($bio,$allRepos);
 	if ( $fav )
 		array_unshift($allRepos,$fav);
 	$file['community'] = $allRepos;

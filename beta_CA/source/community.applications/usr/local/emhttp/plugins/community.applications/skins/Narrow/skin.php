@@ -76,7 +76,11 @@ function my_display_apps($file,$pageNumber=1,$selectedApps=false,$startup=false)
 	foreach ($displayedTemplates as $template) {
 		if ( $template['RepositoryTemplate'] ) {
 			$template['display_iconClickable'] = "<img class='displayIcon' src='{$template['icon']}'></img>";
-			$template['CardDescription'] = (strlen($template['bio']) > 240) ? substr($template['bio'],0,240)." ..." : $template['bio'];
+			if ( $template['bio'] ) {
+				$template['CardDescription'] = (strlen($template['bio']) > 240) ? substr($template['bio'],0,240)." ..." : $template['bio'];
+			} else {
+				$template['CardDescription'] = tr("No description present");
+			}
 			$template['display_dockerName'] = $template['RepoName'];
 			
 			if ( ! $template['DonateText'] )

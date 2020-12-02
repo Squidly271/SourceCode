@@ -110,7 +110,7 @@ case 'get_content':
 			break;
 	}
 	$category = $category ? "/$category/i" : false;
-	
+
 	$newAppTime = strtotime($caSettings['timeNew']);
 
 	if ( file_exists($caPaths['addConverted']) ) {
@@ -118,7 +118,7 @@ case 'get_content':
 		getConvertedTemplates();
 	}
 	if ( strpos($category,":") && $filter ) {
-		$disp = readJsonFile($caPaths['community-templates-allSearchResults']); 
+		$disp = readJsonFile($caPaths['community-templates-allSearchResults']);
 		$file = $disp['community'];
 	} else {
 		$file = readJsonFile($caPaths['community-templates-info']);
@@ -183,7 +183,8 @@ case 'get_content':
 			continue;
 		}
 		if ( $template['Deprecated'] && $displayDeprecated && ! $template['Blacklist']) {
-			$display[] = $template;
+			if ( ! $template['BranchID'] )
+				$display[] = $template;
 			continue;
 		}
 		if ( ($caSettings['hideDeprecated'] == "true") && ($template['Deprecated'] && ! $displayDeprecated) ) continue;
@@ -218,7 +219,6 @@ case 'get_content':
 				$template['Description'] = highlight($filter, $template['Description']);
 				$template['Author'] = highlight($filter, $template['Author']);
 				$template['CardDescription'] = highlight($filter,$template['CardDescription']);
-	//			$template['RepoName'] = highlight($filter,$template['RepoName']);
 				if ($template['Language']) {
 					$template['Language'] = highlight($filter,$template['Language']);
 					$template['LanguageLocal'] = highlight($filter,$template['LanguageLocal']);
@@ -242,7 +242,6 @@ case 'get_content':
 		if ( is_array($searchResults['nameHit']) ) {
 			usort($searchResults['nameHit'],"mySort");
 			if ( ! strpos($filter," Repository") ) {
-	//			usort($searchResults['nameHit'],"recommendedSort");
 				if ( $caSettings['favourite'] && $caSettings['favourite'] !== "none" ) {
 					usort($searchResults['nameHit'],"favouriteSort");
 				}
@@ -260,7 +259,7 @@ case 'get_content':
 			usort($searchResults['favNameHit'],"mySort");
 		} else
 			$searchResults['favNameHit'] = array();
-			
+
 		$displayApplications['community'] = array_merge($searchResults['favNameHit'],$searchResults['nameHit'],$searchResults['anyHit']);
 		$sortOrder['sortBy'] = "noSort";
 	} else {
@@ -769,7 +768,7 @@ case 'statistics':
 	$invalidXML = readJsonFile($caPaths['invalidXML_txt']);
 
 	foreach ($templates as $template) {
-		if ( $template['Deprecated'] && ! $template['Blacklist'] ) $statistics['totalDeprecated']++;
+		if ( $template['Deprecated'] && ! $template['Blacklist'] && ! $template['BranchID']) $statistics['totalDeprecated']++;
 
 		if ( ! $template['Compatible'] ) $statistics['totalIncompatible']++;
 
@@ -885,8 +884,8 @@ case 'populateAutoComplete':
 				$autoComplete[$name] = str_replace("Dynamix ","",$autoComplete[$name]);
 			if ( startsWith($autoComplete[$name],"CA ") )
 				$autoComplete[$name] = str_replace("CA ","",$autoComplete[$name]);
-			
-			if ( $template['Plugin'] ) 
+
+			if ( $template['Plugin'] )
 				$autoComplete[strtolower($template['Author'])] = $template['Author'];
 		}
 	}
@@ -1097,12 +1096,15 @@ case 'remove_multiApplications':
 		postReturn(["status"=>"ok"]);
 	break;
 
+############################################
+# Get's the categories present on a search #
+############################################
 case 'getCategoriesPresent':
 	if ( is_file($caPaths['community-templates-allSearchResults']) )
 		$displayed = readJsonFile($caPaths['community-templates-allSearchResults']);
 	else
 		$displayed = readJsonFile($caPaths['community-templates-displayed']);
-	
+
 	$categories = array();
 	foreach ($displayed['community'] as $template) {
 		$cats = explode(" ",$template['Category']);
@@ -1117,25 +1119,28 @@ case 'getCategoriesPresent':
 		$categories[] = "repos";
 		$categories[] = "All";
 	}
-	
+
 	postReturn(array_values(array_unique($categories)));
 	break;
-	
+
+##################################
+# Set's the favourite repository #
+##################################
 case 'toggleFavourite':
 	$repository = getPost("repository","");
-	
+
 	$caSettings['favourite'] = $repository;
 	write_ini_file($caPaths['pluginSettings'],$caSettings);
 	postReturn(['status'=>"ok"]);
 	break;
-	
+
 ####################################
 # Returns the favourite repository #
 ####################################
 case 'getFavourite':
 	postReturn(["favourite"=>$caSettings['favourite']]);
 	break;
-	
+
 ###############################################
 # Return an error if the action doesn't exist #
 ###############################################
@@ -1194,7 +1199,7 @@ function DownloadApplicationFeed() {
 		$o['SortAuthor']    = $o['Author'];
 		$o['SortName']      = str_replace("-"," ",$o['Name']);
 		$o['CardDescription'] = (strlen($o['Description']) > 240) ? substr($o['Description'],0,240)." ..." : $o['Description'];
-		
+
 		if ( $o['IconHTTPS'] )
 			$o['IconHTTPS'] = $caPaths['iconHTTPSbase'] .$o['IconHTTPS'];
 
@@ -1202,7 +1207,7 @@ function DownloadApplicationFeed() {
 			$o['Author']        = $o['PluginAuthor'];
 			$o['Repository']    = $o['PluginURL'];
 		}
-		
+
 		$o['Blacklist'] = $o['CABlacklist'] ? true : $o['Blacklist'];
 		$o['MinVer'] = max(array($o['MinVer'],$o['UpdateMinVer']));
 		$tag = explode(":",$o['Repository']);
@@ -1326,7 +1331,7 @@ function appOfDay($file) {
 	global $caPaths,$caSettings,$sortOrder;
 
 	$info = getRunningContainers();
-	
+
 	switch ($caSettings['startup']) {
 		case "random":
 			$oldAppDay = @filemtime($caPaths['appOfTheDay']);
@@ -1431,7 +1436,7 @@ function checkRandomApp($test,$info=array(),$random=false) {
 		if (! $return) {
 			exec("logger {$test['Repository']}");
 		}
-		
+
 		return ! appInstalled($test,$info);
 	}
 	return true;
@@ -1441,7 +1446,7 @@ function checkRandomApp($test,$info=array(),$random=false) {
 ##############################################################
 function displayRepositories() {
 	global $caPaths, $caSettings;
-	
+
 	$repositories = readJsonFile($caPaths['repositoryList']);
 	if ( is_file($caPaths['community-templates-allSearchResults']) ) {
 		$temp = readJsonFile($caPaths['community-templates-allSearchResults']);

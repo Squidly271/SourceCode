@@ -12,7 +12,6 @@
 function arrayEntriesToObject($sourceArray,$defaultFlag=true) {
 	return is_array($sourceArray) ? array_fill_keys($sourceArray,$defaultFlag) : array();
 }
-
 ###########################################################################
 # Helper function to determine if a plugin has an update available or not #
 ###########################################################################
@@ -29,7 +28,6 @@ function checkPluginUpdate($filename) {
 	}
 	return false;
 }
-
 ###################################################################################
 # returns a random file name (/tmp/community.applications/tempFiles/34234234.tmp) #
 ###################################################################################
@@ -38,7 +36,6 @@ function randomFile() {
 
 	return tempnam($caPaths['tempFiles'],"CA-Temp-");
 }
-
 ##################################################################
 # 7 Functions to avoid typing the same lines over and over again #
 ##################################################################
@@ -51,7 +48,7 @@ function writeJsonFile($filename,$jsonArray) {
 }
 function download_url($url, $path = "", $bg = false, $timeout = 45) {
 	global $debugging, $caPaths;
-	
+
 	$ch = curl_init();
 	curl_setopt($ch,CURLOPT_URL,$url);
 	curl_setopt($ch,CURLOPT_FRESH_CONNECT,true);
@@ -103,7 +100,6 @@ function var_dump_ret($mixed = null) {
 	ob_end_clean();
 	return $content;
 }
-
 ##############################################
 # Determine if $haystack begins with $needle #
 ##############################################
@@ -111,7 +107,6 @@ function startsWith($haystack, $needle) {
 	if ( !is_string($haystack) || ! is_string($needle) ) return false;
 	return $needle === "" || strripos($haystack, $needle, -strlen($haystack)) !== FALSE;
 }
-
 #############################################
 # Determine if $string ends with $endstring #
 #############################################
@@ -122,7 +117,6 @@ function endsWith($string, $endString) {
 	}
 	return (substr($string, -$len) === $endString);
 }
-
 ###########################################
 # Replace the first occurance in a string #
 ###########################################
@@ -137,7 +131,6 @@ function last_str_replace($haystack, $needle, $replace) {
 	$pos = strrpos($haystack, $needle);
 	return ($pos !== false) ? substr_replace($haystack, $replace, $pos, strlen($needle)) : $haystack;
 }
-
 #######################
 # Custom sort routine #
 #######################
@@ -165,15 +158,9 @@ function mySort($a, $b) {
 	else return 0;
 }
 
-function recommendedSort($a,$b) {
-	if ( $a['Recommended'] ) return -1;
-	if ( $b['Recommended'] ) return 1;
-	return 0;
-}
-
 function repositorySort($a,$b) {
 	global $caSettings;
-	
+
 	if ( $a['RepoName'] == $caSettings['favourite'] ) return -1;
 	if ( $b['RepoName'] == $caSettings['favourite'] ) return 1;
 	return 0;
@@ -181,7 +168,7 @@ function repositorySort($a,$b) {
 
 function favouriteSort($a,$b) {
 	global $caSettings;
-	
+
 	if ( $a['Repo'] == $caSettings['favourite'] ) return -1;
 	if ( $b['Repo'] == $caSettings['favourite'] ) return 1;
 	return 0;
@@ -203,14 +190,12 @@ function searchArray($array,$key,$value,$startingIndex=0) {
 	}
 	return $result;
 }
-
 #############################
 # Highlights search results #
 #############################
 function highlight($text, $search) {
 	return preg_replace('#'. preg_quote($text,'#') .'#si', '<span class="caHighlight">\\0</span>', $search);
 }
-
 ########################################################
 # Fix common problems (maintainer errors) in templates #
 ########################################################
@@ -246,7 +231,6 @@ function fixTemplates($template) {
 	}
 	return $template;
 }
-
 ###############################################
 # Function used to create XML's from appFeeds #
 ###############################################
@@ -262,7 +246,6 @@ function makeXML($template) {
 	$xml = $Array2XML->createXML("Container",$template);
 	return $xml->saveXML();
 }
-
 #################################################################################
 # Function to fix differing schema in the appfeed vs what Array2XML class wants #
 #################################################################################
@@ -283,7 +266,6 @@ function fixAttributes(&$template,$attribute) {
 		$template[$attribute] = $tempArray2;
 	}
 }
-
 #################################################################
 # checks the Min/Max version of an app against unRaid's version #
 # Returns: TRUE if it's valid to run, FALSE if not              #
@@ -295,7 +277,6 @@ function versionCheck($template) {
 	if ( $template['MaxVer'] && ( version_compare($template['MaxVer'],$caSettings['unRaidVersion']) < 0 ) ) return false;
 	return true;
 }
-
 ###############################################
 # Function to read a template XML to an array #
 ###############################################
@@ -334,7 +315,6 @@ function readXmlFile($xmlfile,$generic=false) {
 
 	return $o;
 }
-
 ###################################################################
 # Function To Merge Moderation into templates array               #
 # (Because moderation can be updated when templates are not )     #
@@ -357,14 +337,12 @@ function moderateTemplates() {
 	writeJsonFile($caPaths['community-templates-info'],$o);
 	pluginDupe($o);
 }
-
 #######################################################
 # Function to check for a valid URL                   #
 #######################################################
 function validURL($URL) {
 	return filter_var($URL, FILTER_VALIDATE_URL);
 }
-
 #######################################################
 # Function used to determine if a search term matches #
 #######################################################
@@ -380,7 +358,6 @@ function filterMatch($filter,$searchArray,$exact=true) {
 	}
 	return $exact ? ($foundword == count($filterwords)) : ($foundword > 0);
 }
-
 ##########################################################
 # Used to figure out which plugins have duplicated names #
 ##########################################################
@@ -398,7 +375,6 @@ function pluginDupe($templates) {
 	}
 	writeJsonFile($caPaths['pluginDupes'],$dupeList);
 }
-
 ###################################
 # Checks if a plugin is installed #
 ###################################
@@ -419,13 +395,13 @@ function appInstalled($template,$info) {
 		return checkInstalledPlugin($template);
 	if ($test['Language'])
 		return is_dir("/usr/local/emhttp/languages/lang-{$template['LanguagePack']}");
-	
+
 	$name = $template['SortName'];
 	$selected = $info[$name]['template'];
 	$tmpRepo = strpos($template['Repository'],":") ? $template['Repository'] : "{$template['Repository']}:latest";
 	if ( ! strpos($tmpRepo,"/") )
 		$tmpRepo = "library/$tmpRepo";
-	
+
 	return $selected ? ($tmpRepo == $info[$name]['repository']) : false;
 }
 ###########################################################
@@ -434,7 +410,6 @@ function appInstalled($template,$info) {
 function alphaNumeric($string) {
 	return preg_replace("/[^a-zA-Z0-9]+/", "", $string);
 }
-
 ##################################################################
 # mobile browser detection from http://detectmobilebrowsers.com/ #
 ##################################################################
@@ -444,7 +419,6 @@ function isMobile() {
 	$useragent=$_SERVER['HTTP_USER_AGENT'];
 	return (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i',$useragent)||preg_match('/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i',substr($useragent,0,4)));
 }
-
 ################################################
 # Returns the author from the Repository entry #
 ################################################
@@ -458,7 +432,6 @@ function getAuthor($template) {
 
 	return strip_tags(explode(":",$repoEntry[count($repoEntry)-2])[0]);
 }
-
 #########################################
 # Gets the running/installed containers #
 #########################################
@@ -480,7 +453,6 @@ function getRunningContainers() {
 	}
 	return $infoTmp ?: array();
 }
-
 ############################
 # Trims the category lists #
 ############################
@@ -553,7 +525,6 @@ function fixDescription($Description) {
 	}
 	return is_string($Description) ? $Description : "";
 }
-
 ############################
 # displays the branch tags #
 ############################
@@ -576,25 +547,23 @@ function formatTags($leadTemplate) {
 	}
 	return $o;
 }
-
 ###########################
 # handles the POST return #
 ###########################
 function postReturn($retArray) {
 	global $debugging, $caPaths;
-	
+
 	if (is_array($retArray))
 		echo json_encode($retArray);
 	else
 		echo $retArray;
 	ob_flush();
 	flush();
-	
+
 	if ($debugging) {
 		file_put_contents($caPaths['logging'],"POST RETURN:\n".var_dump_ret($retArray)."\n",FILE_APPEND);
 	}
 }
-
 ####################################
 # Translation backwards compatible #
 ####################################
@@ -612,7 +581,6 @@ if ( ! function_exists("tr") ) {
 		return $string;
 	}
 }
-
 #############################
 # Check for language update #
 #############################
@@ -635,7 +603,6 @@ function languageCheck($template) {
 
 	return (strcmp($template['Version'],$xmlFile['Version']) > 0) || (strcmp($OSupdates['Version'],$xmlFile['Version']) > 0);
 }
-
 ######################
 # Writes an ini file #
 ######################
@@ -653,8 +620,7 @@ function write_ini_file($file,$array) {
 	file_put_contents($file,implode("\r\n", $res),LOCK_EX);
 }
 
-
- /**
+/**
  * @copyright Copyright 2006-2012, Miles Johnson - http://milesj.me
  * @license   http://opensource.org/licenses/mit-license.php - Licensed under the MIT License
  * @link    http://milesj.me/code/php/type-converter

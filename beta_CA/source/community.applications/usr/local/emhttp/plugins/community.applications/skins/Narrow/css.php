@@ -203,6 +203,13 @@ a.ca_fa-delete{text-decoration:none;margin-left:1rem;}
 .ca_fa-switchto::before {content:"\e982";font-family:Unraid;}
 .ca_favourite::before {content:"\f2be";font-family:fontAwesome;color:#1fa67a;}
 .ca_favourite {cursor:default !important;}
+.ca_twitter::before {content:"\f099";font-family:fontAwesome;}
+.ca_reddit::before {content:"\f281";font-family:fontAwesome;}
+.ca_facebook::before {content:"\f09a";font-family:fontAwesome;}
+.ca_discord {height:2.9rem; margin-top:-8px;cursor:pointer;}
+.ca_forum::before {content:"\f1cd";font-family:fontAwesome;}
+.ca_webpage::before {content:"\f0ac";font-family:fontAwesome;}
+.ca_profile::before {content:"\f2bb";font-family:fontAwesome;}
 .trendingUp::before {content:"\f062";font-family:fontAwesome;}
 .trendingDown::before {content:"\f063";font-family:fontAwesome;}
 .ca_private::after {content:"\f069";font-family:fontAwesome;}

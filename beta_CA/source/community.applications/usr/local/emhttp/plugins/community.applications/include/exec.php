@@ -183,7 +183,8 @@ case 'get_content':
 			continue;
 		}
 		if ( $template['Deprecated'] && $displayDeprecated && ! $template['Blacklist']) {
-			$display[] = $template;
+			if ( ! $template['BranchID'] )
+				$display[] = $template;
 			continue;
 		}
 		if ( ($caSettings['hideDeprecated'] == "true") && ($template['Deprecated'] && ! $displayDeprecated) ) continue;
@@ -769,7 +770,7 @@ case 'statistics':
 	$invalidXML = readJsonFile($caPaths['invalidXML_txt']);
 
 	foreach ($templates as $template) {
-		if ( $template['Deprecated'] && ! $template['Blacklist'] ) $statistics['totalDeprecated']++;
+		if ( $template['Deprecated'] && ! $template['Blacklist'] && ! $template['BranchID']) $statistics['totalDeprecated']++;
 
 		if ( ! $template['Compatible'] ) $statistics['totalIncompatible']++;
 

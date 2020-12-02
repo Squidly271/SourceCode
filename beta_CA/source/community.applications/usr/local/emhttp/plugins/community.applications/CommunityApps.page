@@ -376,6 +376,13 @@ $(function(){
 		updateLanguage($(this).data("language"));
 	});
 
+	$('.mainArea').on("mouseover",".ca_discord",function() {
+		$(this).attr("src","/plugins/community.applications/images/discord-hover.svg");
+	});
+	$('.mainArea').on("mouseleave",".ca_discord",function() {
+		$(this).attr("src","/plugins/community.applications/images/discord-<?=$theme?>.svg");
+	});
+
 <?if ( ! $unRaid66 ):?>
 	$("html").css("font-size","10px");
 <?endif;?>

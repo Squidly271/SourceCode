@@ -75,7 +75,22 @@ function my_display_apps($file,$pageNumber=1,$selectedApps=false,$startup=false)
 	# Create entries for skins.
 	foreach ($displayedTemplates as $template) {
 		if ( $template['RepositoryTemplate'] ) {
-			$template['display_iconClickable'] = "<img class='displayIcon' src='{$template['icon']}'></img>";
+			if ( ! $theme ) {
+				$dynamix = parse_ini_file($caPaths['dynamixSettings'],true);
+				switch ($dynamix['display']['theme']) {
+					case 'white':
+					case 'black':
+					case 'azure':
+					case 'gray':
+						$theme = $dynamix['display']['theme'];
+						break;
+					default:
+						$theme = "black";
+						break;
+				}
+			}
+				
+			$template['display_iconClickable'] = "<img class='displayIcon' src='{$template['icon']}' data-repository='".htmlentities($template['RepoName'],ENT_QUOTES)."'></img>";
 			if ( $template['bio'] ) {
 				$template['CardDescription'] = (strlen($template['bio']) > 240) ? substr($template['bio'],0,240)." ..." : $template['bio'];
 			} else {
@@ -87,6 +102,20 @@ function my_display_apps($file,$pageNumber=1,$selectedApps=false,$startup=false)
 				$template['DonateText'] = tr("Donate To Author");
 			$template['display_DonateImage'] = $template['DonateLink'] ? "<a class='ca_tooltip donateLink donate' href='{$template['DonateLink']}' target='_blank' title='{$template['DonateText']}'>".tr("Donate")."</a>" : "";
 	
+			if ( $template['Forum'] )
+				$template['display_faSupport'] = "<a class='ca_tooltip ca_forum appIcons' target='_blank' href='{$template['Forum']}' title='".tr("Go to the forum")."'></a>";
+			if ( $template['Twitter'] )
+				$template['display_twitter'] = "<a class='ca_tooltip ca_twitter appIcons' target='_blank' href='{$template['Twitter']}' title='".tr("Go to twitter")."'></a>";
+			if ( $template['Reddit'] )
+				$template['display_reddit'] = "<a class='ca_tooltip ca_reddit appIcons' target='_blank' href='{$template['Reddit']}' title='".tr("Go to reddit")."'></a>";
+			if ( $template['Facebook'] )
+				$template['display_facebook'] = "<a class='ca_tooltip ca_facebook appIcons' target='_blank' href='{$template['Facebook']}' title='".tr("Go to facebook")."'></a>";
+			if ( $template['Discord'] )
+				$template['display_discord'] = "<img class='ca_tooltip ca_discord' data-theme='$theme' src='/plugins/community.applications/images/discord-$theme.svg' onclick='window.open(&quot;{$template['Discord']}&quot;,&quot;_blank&quot;);' title='Go to discord'></img>";
+			if ( $template['WebPage'] )
+				$template['display_webpage'] = "<a class='ca_tooltip ca_webpage appIcons' target='_blank' href='{$template['WebPage']}' title='".tr("Go to webpage")."'></a>";
+			if ( $template['profile'] )
+				$template['display_profile'] = "<a class='ca_tooltip ca_profile appIcons' target='_blank' href='{$template['profile']}' title='".tr("Go to forum profile")."'></a>";
 			$favClass = ( $caSettings['favourite'] == $template['RepoName'] ) ? "ca_favouriteRepo" : "ca_non_favouriteRepo";
 			$niceRepoName = str_replace("'s Repository","",$template['RepoName']);
 			$niceRepoName = str_replace("' Repository","",$niceRepoName);
@@ -288,7 +317,7 @@ function my_display_apps($file,$pageNumber=1,$selectedApps=false,$startup=false)
 				$currentLanguage = is_dir("/usr/local/emhttp/languages/$currentLanguage") ? $currentLanguage : "en_US";
 				$countryCode = $template['LanguageDefault'] ? "en_US" : $template['LanguagePack'];
 				if ( in_array($countryCode,$installedLanguages) ) {
-					$template['display_languageUpdate'] = languageCheck($template) ? "<a class='ca_tooltip appIcons ca_fa-update languageUpdate' title='".tr("Update Language Pack")."' data-language='$countryCode' data-language_xml='{$template['TemplateURL']}'></a>" : "";
+					$template['display_languageUpdate'] = languageCheck($template) ? "<a class='ca_tooltip appIcons ca_fa-update languageUpdate' title='{$template['UpdateLanguage']}' data-language='$countryCode' data-language_xml='{$template['TemplateURL']}'></a>" : "";
 					unset($template['display_dockerInstallIcon']);
 					if ( $currentLanguage != $countryCode ) {
 						$template['display_language_switch'] = "<a class='ca_tooltip appIcons ca_fa-switchto languageSwitch' title='{$template['SwitchLanguage']}' data-language='$countryCode'></a>";
@@ -875,7 +904,7 @@ function displayCard($template) {
 			</div>
 			<div class='ca_hr'></div>
 			<div class='ca_bottomLine'>
-				{$template['display_multi_install']}{$template['display_languageUpdate']}{$template['display_languageInstallIcon']}{$template['display_language_switch']}{$template['display_pluginInstallIcon']} {$template['display_dockerInstallIcon']} $dockerReinstall {$template['display_dockerReinstallIcon']} {$template['display_dockerEditIcon']} {$template['display_pluginSettingsIcon']}{$template['display_infoIcon']} {$template['dockerWebIcon']} {$template['display_faSupport']} {$template['display_faFavourite']} {$template['display_faProject']} {$template['display_pinButton']}{$template['display_favouriteButton']}{$template['display_repoSearch']}
+				{$template['display_multi_install']}{$template['display_languageUpdate']}{$template['display_languageInstallIcon']}{$template['display_language_switch']}{$template['display_pluginInstallIcon']}{$template['display_dockerInstallIcon']} $dockerReinstall {$template['display_dockerReinstallIcon']} {$template['display_dockerEditIcon']} {$template['display_pluginSettingsIcon']}{$template['display_infoIcon']} {$template['dockerWebIcon']}{$template['display_profile']}{$template['display_webpage']}{$template['display_faSupport']}{$template['display_twitter']}{$template['display_reddit']}{$template['display_discord']}{$template['display_facebook']}{$template['display_faFavourite']} {$template['display_faProject']} {$template['display_pinButton']}{$template['display_favouriteButton']}{$template['display_repoSearch']}
 				<span class='ca_bottomRight'>
 					{$template['display_removable']} {$template['display_Uninstall']}
 				</span>

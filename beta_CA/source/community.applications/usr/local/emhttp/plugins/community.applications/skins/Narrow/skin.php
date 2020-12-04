@@ -898,7 +898,7 @@ function getRepoDescription($repository) {
 	if ( $caSettings['favourite'] == $repository ) 
 		$t .= "<div class='ca_center ca_favouriteRepo' style='font-size:1.2rem;cursor:default;'>".tr("Favourite Repository")." </div>";
 	else
-		$t .= "<div id='favMsg' class='ca_center ca_non_favouriteRepo' style='font-size:1.2rem;' onclick='setFavourite();'>".tr("Set as favourite repository")." </div>";
+		$t .= "<div id='favMsg' class='ca_center ca_non_favouriteRepo appIconsPopUp' style='font-size:1.2rem;' onclick='setFavourite();'>".tr("Set as favourite repository")." </div>";
 		
 	$t .= "<table style='width:60%;margin-left:105px;'>";
 	$t .= "<tr><td style='width:50%;'><b>".tr("Total Docker Applications")."</b></td><td style='width:30%;text-align:right;'>$totalDocker</td></tr>";

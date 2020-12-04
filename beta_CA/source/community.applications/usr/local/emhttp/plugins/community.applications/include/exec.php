@@ -1135,7 +1135,7 @@ case 'getCategoriesPresent':
 # Set's the favourite repository #
 ##################################
 case 'toggleFavourite':
-	$repository = getPost("repository","");
+	$repository = html_entity_decode(getPost("repository",""),ENT_QUOTES);
 
 	$caSettings['favourite'] = $repository;
 	write_ini_file($caPaths['pluginSettings'],$caSettings);

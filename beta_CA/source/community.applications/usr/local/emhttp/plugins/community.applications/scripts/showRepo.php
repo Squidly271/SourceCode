@@ -22,7 +22,8 @@ $unraidVersion  = parse_ini_file("/etc/unraid-version");
 $unRaidVars     = parse_ini_file("/var/local/emhttp/var.ini");
 $caSettings     = parse_plugin_cfg("community.applications");
 $csrf_token     = $unRaidVars['csrf_token'];
-$repoName       = htmlentities(urldecode($_GET['repository']),ENT_QUOTES);
+$repository     = urldecode($_GET['repository']);
+$repoName       = htmlentities($repository,ENT_QUOTES);
 
 function tr($string,$ret=false) {
 	if ( function_exists("_") )
@@ -84,23 +85,21 @@ $(function() {
 	});
 });
 
-
-function cookiesEnabled() {
-	return evaluateBoolean(navigator.cookieEnabled);
+function setFavourite(){
+	if ( $("#favMsg").hasClass("ca_favouriteRepo") )
+		return;
+	var repository = "<?=$repository?>";
+	$.post("/plugins/community.applications/include/exec.php",{action:'toggleFavourite',repository:'<?=$repoName?>',csrf_token:csrf_token});
+	$("#favMsg").toggleClass("ca_non_favouriteRepo ca_favouriteRepo").html("<?tr("Favourite Repository");?> ");
+	$.cookie("ca_setFavRepo",repository,{path:"/"});
 }
 
-function evaluateBoolean(str) {
-	regex=/^\s*(true|1|on)\s*$/i
-	return regex.test(str);
+function searchRepo() {
+	var repository = "<?=$repository?>";
+	$.cookie("ca_searchRepo",repository,{path:"/"});
+	window.parent.Shadowbox.close();
 }
-
-function openNewModalWindow(newURL) {
-	var popUp = window.open(newURL,"_parent");
-	if ( !popUp || popUp.closed || typeof popUp == "undefined" ) {
-		alert("<?tr("Popup Blocked CA requires popups to be enabled under certain circumstances.  You must white list your server within your browser to allow popups")?>");
-	}
-}
-
+	
 </script>
 <html>
 <body>

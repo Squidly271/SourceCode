@@ -207,7 +207,7 @@ $(function(){
 
 	$(".mainArea").on("click",".ca_repoPopup,.ca_repoinfo",function() {
 		var repository = $(this).data("repository");
-		showDesc_openBox("/plugins/community.applications/scripts/showRepo.php?repository="+repository,repository,450,650,true,"");
+		showDesc_openBox("/plugins/community.applications/scripts/showRepo.php?repository="+repository,repository,450,650,true,"afterRepoPopUp();");
 	});
 
 	$('.mainArea').on("click",".unpinned,.pinned",function() {
@@ -1701,6 +1701,20 @@ function setToolTipForFavourite() {
 	});
 }
 
+function afterRepoPopUp() {
+	if ($.cookie("ca_setFavRepo") ) {
+		$(".ca_fav").removeClass("ca_favouriteRepo").addClass("ca_non_favouriteRepo");
+		var apps = $.find('.ca_non_favouriteRepo[data-repository="'+$.cookie("ca_setFavRepo")+'"]');
+		$(apps).addClass("ca_favouriteRepo");
+		setToolTipForFavourite();
+		$.cookie("ca_setFavRepo","",{path:"/"});
+	}
+	if ($.cookie("ca_searchRepo") ) {
+		var repo = $.cookie("ca_searchRepo");
+		$.cookie("ca_searchRepo","",{path:"/"});
+		doSearch(false,repo);
+	}
+}
 </script>
 
 > <span class='caHelpIconSpacing'><i class='fa fa-sort-alpha-asc enabledIcon' aria-hidden='true' style='font-size:2rem;'></i></span><?tr("This chooses how to sort the results");?><br>

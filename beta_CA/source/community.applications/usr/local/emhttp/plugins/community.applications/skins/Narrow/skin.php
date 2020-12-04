@@ -873,27 +873,44 @@ function getRepoDescription($repository) {
 	}
 	$t .= "<hr>";
 	
+	$totalApps = $totalPlugins = $totalDocker = $totalDownloads = 0;
 	foreach ($templates as $template) {
 		if ( $template['RepoName'] !== $repository ) continue;
 		if ( $template['BranchID'] ) continue;
-		if ( $template['downloads'] ) {
-			$totalDownloads = $totalDownloads + $template['downloads'];
-			$downloadAppCount++;
-		}
-		if ( $template['Blacklist'] || $template['Deprecated'] || ! $template['Compatible'] ) 
-			continue;
 		
+		if ( $template['Registry'] ) {
+			$totalDocker++;
+			if ( $template['downloads'] ) {
+				$totalDownloads = $totalDownloads + $template['downloads'];
+				$downloadDockerCount++;
+			}
+		}
+		if ( $template['PluginURL'] ) {
+			$totalPlugins++;
+		}
+		if ( $template['Language'] ) {
+			$totalLanguage++;
+		}
+
 		$totalApps++;
 	}
 
 	$t .= "<div>";
 	if ( $caSettings['favourite'] == $repository ) 
 		$t .= "<div class='ca_center ca_favouriteRepo' style='font-size:1.2rem;cursor:default;'>".tr("Favourite Repository")." </div>";
-	
+	else
+		$t .= "<div id='favMsg' class='ca_center ca_non_favouriteRepo' style='font-size:1.2rem;' onclick='setFavourite();'>".tr("Set as favourite repository")." </div>";
+		
 	$t .= "<table style='width:60%;margin-left:105px;'>";
+	$t .= "<tr><td style='width:50%;'><b>".tr("Total Docker Applications")."</b></td><td style='width:30%;text-align:right;'>$totalDocker</td></tr>";
+	$t .= "<tr><td style='width:50%;'><b>".tr("Total Plugin Applications")."</b></td><td style='width:30%;text-align:right;'>$totalPlugins</td></tr>";
+	if ( $totalLanguage )
+		$t .= "<tr><td style='width:50%;'><b>".tr("Total Languages")."</b></td><td style='width:30%;text-align:right;'>$totalLanguage</td></tr>";
+
 	$t .= "<tr><td style='width:50%;'><b>".tr("Total Applications")."</b></td><td style='width:30%;text-align:right;'>$totalApps</td></tr>";
-	if ( $downloadAppCount ) {
-		$avgDownloads = intval($totalDownloads / $downloadAppCount);
+
+	if ( $downloadDockerCount && $totalDownloads ) {
+		$avgDownloads = intval($totalDownloads / $downloadDockerCount);
 		$t .= "<tr><td><b>".tr("Total Known Downloads")."</b></td><td style='text-align:right;'>".number_format($totalDownloads)."</td></tr>";
 		$t .= "<tr><td><b>".tr("Average Downloads Per App")."</b></td><td style='text-align:right;'>".number_format($avgDownloads)."</td></tr>";
 	}
@@ -902,7 +919,7 @@ function getRepoDescription($repository) {
 	$t .= "<hr>";
 	
 	$installLine = "<div style='display:flex;flex-wrap:wrap;justify-content:center;width:90%;margin-left:5%;'>";
-	$installLine .= "<div><a class='appIconsPopUp ca_showRepo'> Show Apps</a></div>";
+	$installLine .= "<div><a class='appIconsPopUp ca_showRepo' onclick='searchRepo();'> Search Apps</a></div>";
 	if ( $repo['WebPage'] ) 
 		$installLine .= "<div><a class='appIconsPopUp ca_webpage' href='{$repo['WebPage']}' target='_blank'> ".tr("Web Page")."</a></div>";
 	if ( $repo['Forum'] )

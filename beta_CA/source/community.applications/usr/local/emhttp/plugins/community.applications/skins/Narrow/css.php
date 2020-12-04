@@ -10,7 +10,6 @@ header("Content-type: text/css; charset: UTF-8");
 
 $docroot = $docroot ?? $_SERVER['DOCUMENT_ROOT'] ?: "/usr/local/emhttp";
 
-
 require_once "$docroot/plugins/dynamix/include/Wrappers.php";
 
 $dynamix = parse_plugin_cfg("dynamix");
@@ -150,6 +149,7 @@ table tbody td {line-height:1.4rem;}
 .ca_highlight {color:#0e5d08;font-weight:bold;}
 .ca_description {color:#505E6F;}
 a.ca_appPopup {text-decoration:none;cursor:pointer;}
+.ca_repoPopup {text-docoration:none;cursor:pointer;}
 input[type=checkbox] {width:2rem;height:2rem;margin-right:1rem;margin-top:-.5rem;margin-left:0rem;}
 .enabledIcon {cursor:pointer;color:<?=$unRaid66color?>;}
 .disabledIcon {color:#040404;font-size:2.5rem;}
@@ -164,7 +164,7 @@ input[type=checkbox] {width:2rem;height:2rem;margin-right:1rem;margin-top:-.5rem
 .ca_repoSearch {font-size:2rem;cursor:pointer;padding-left:.5rem;padding-right:.5rem;cursor:pointer;padding:.3rem;}
 .ca_repoSearch::after {content:"\f002";font-family:fontAwesome;}
 .appIcons {font-size:2.3rem;color:inherit;cursor:pointer;padding-left:.5rem;padding-right:.5rem;}
-.appIcons:hover {text-decoration:none;color:<?=$unRaid66color?>;}
+.appIcons:hover {text-decoration:none;color:<?=$unRaid66color?> ! important;}
 .pinned:hover {text-decoration:none;color:<?=$unRaid66color?>;}
 .unpinned:hover {text-decoration:none;color:<?=$unRaid66color?>;}
 a.appIcons {text-decoration:none;}
@@ -199,6 +199,7 @@ a.ca_fa-delete{text-decoration:none;margin-left:1rem;}
 .ca_fa-globe::before {content:"\f0ac";font-family:fontAwesome;}
 .ca_fa-update::before {content:"\f0ed";font-family:fontAwesome;}
 .ca_fa-info::before {content:"\f05a";font-family:fontAwesome;}
+.ca_repoinfo::before {content:"\f05a";font-family:fontAwesome;}
 .ca_fa-warning::before {content:"\f071";font-family:fontAwesome;}
 .ca_fa-switchto::before {content:"\e982";font-family:Unraid;}
 .ca_favourite::before {content:"\f2be";font-family:fontAwesome;color:#1fa67a;}
@@ -206,7 +207,12 @@ a.ca_fa-delete{text-decoration:none;margin-left:1rem;}
 .ca_twitter::before {content:"\f099";font-family:fontAwesome;}
 .ca_reddit::before {content:"\f281";font-family:fontAwesome;}
 .ca_facebook::before {content:"\f09a";font-family:fontAwesome;}
+.ca_showRepo::before {content:"\f002";font-family:fontAwesome;}
+<?if (version_compare($unRaidSettings['version'],"6.9.0-beta37",">")):?>
+.ca_discord::before{content:"\e988";font-family:Unraid;font-size:2.8rem;vertical-align:bottom;}
+<?else:?>
 .ca_discord {height:2.9rem; margin-top:-8px;cursor:pointer;}
+<?endif;?>
 .ca_forum::before {content:"\f1cd";font-family:fontAwesome;}
 .ca_webpage::before {content:"\f0ac";font-family:fontAwesome;}
 .ca_profile::before {content:"\f2bb";font-family:fontAwesome;}

@@ -205,15 +205,17 @@ $(function(){
 		showDesc_openBox("/plugins/community.applications/scripts/showDesc.php?appNumber="+appnumber+"&appPath="+apppath+"&appName="+appname+"'",appname+beta,450,650,true,"checkForPluginInstallRequested()");
 	});
 
+	$(".mainArea").on("click",".ca_repoPopup,.ca_repoinfo",function() {
+		var repository = $(this).data("repository");
+		showDesc_openBox("/plugins/community.applications/scripts/showRepo.php?repository="+repository,repository,450,650,true,"");
+	});
+
 	$('.mainArea').on("click",".unpinned,.pinned",function() {
 		var repository = $(this).data("repository");
 		var name = $(this).data("name");
 		pinApp(this,repository,name);
 	});
-	
 
-
-	
 	$('.mainArea').on("click",".ca_favouriteRepo",function() {
 		$(".ca_fav").removeClass("ca_favouriteRepo").addClass("ca_non_favouriteRepo");
 		$(this).removeClass("ca_favouriteRepo").addClass("ca_non_favouriteRepo");
@@ -231,10 +233,9 @@ $(function(){
 			setFavRepoSearch();
 		});
 	});
-	
+
 	$('.mainArea').on("click",".ca_non_favouriteRepo",function() {
 		$(".ca_fav").removeClass("ca_favouriteRepo").addClass("ca_non_favouriteRepo");
-	//	$(this).addClass("ca_favouriteRepo").removeClass("ca_non_favouriteRepo");
 		var repo = $(this).data("repository");
 		var apps = $.find('.ca_non_favouriteRepo[data-repository="'+repo+'"]');
 		$(apps).removeClass("ca_non_favouriteRepo").addClass("ca_favouriteRepo");
@@ -258,14 +259,14 @@ $(function(){
 	$('.mainArea').on("click",".ca_repoSearch",function() {
 		var repo = $(this).data("repository");
 		doSearch(false,repo);
-	});	
+	});
 
 	$('.favouriteRepo').on("click",function() {
 		if ( $(this).hasClass("caMenuDisabled") )
 			return;
 		var repo = $(this).attr("data-repository");
 		doSearch(false,repo);
-	});	
+	});
 
 	$('.mainArea').on("click",".xmlInstall",function() {
 		var type = $(this).data("type");
@@ -283,14 +284,17 @@ $(function(){
 		scrollToTop();
 		changeCategory(this,false);
 	});
+
 	$('.menuItems').on("mouseover",".caMenuItem",function() {
 		if ( $(this).hasClass("caMenuEnabled") ) {
 			$(this).addClass("hoverMenu");
 		}
 	});
+
 	$('.menuItems').on("mouseleave",".caMenuItem",function() {
 		$(this).removeClass("hoverMenu");
 	});
+
 	$('.menuItems').on("click",".caMenuItem",function() {
 		if ( $(this).hasClass("caMenuDisabled") ) {
 			return;
@@ -320,7 +324,7 @@ $(function(){
 				break;
 		}
 	});
-	
+
 	$(".debugging").on("click",function() {
 		var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
 		var localISOTime = (new Date(Date.now() - tzoffset)).toISOString().slice(0, -1);
@@ -336,9 +340,7 @@ $(function(){
 			doSearch(true);
 		}
 	});
-	
-	
-	
+
 	$(".initDockerSearch").click(function()     { initDockerSearch(); });
 	$(".multi_installButton").click(function()  { installMulti(); });
 	$(".multi_installClear").click(function()   { clearMultiInstall(); });
@@ -363,25 +365,32 @@ $(function(){
 			}
 		});
 	});
+
 	$('.mainArea').on("click",".languageSwitch",function() {
 		CAswitchLanguage($(this).data("language"));
 	});
+
 	$('.mainArea').on("click",".languageInstall",function() {
 		installLanguage($(this).data("language_xml"),$(this).data("language"));
 	});
+
 	$('.mainArea').on("click",".languageRemove",function() {
 		removeLanguage($(this).data("language"));
 	});
+
 	$('.mainArea').on("click",".languageUpdate",function() {
 		updateLanguage($(this).data("language"));
 	});
 
+<?if ( version_compare($unRaidSettings['version'],"6.9.0-beta38","<") ):?>
 	$('.mainArea').on("mouseover",".ca_discord",function() {
 		$(this).attr("src","/plugins/community.applications/images/discord-hover.svg");
 	});
+
 	$('.mainArea').on("mouseleave",".ca_discord",function() {
 		$(this).attr("src","/plugins/community.applications/images/discord-<?=$theme?>.svg");
 	});
+<?endif;?>
 
 <?if ( ! $unRaid66 ):?>
 	$("html").css("font-size","10px");
@@ -533,7 +542,6 @@ function checkForPluginInstallRequested() {
 	if ( language ) {
 		CAswitchLanguage(language);
 	}
-
 }
 
 function modalPluginInstall() {
@@ -565,10 +573,8 @@ function showSpecialCategory(button) {
 function changeCategory(button,subSwitch) {
 	var description = $(button).text();
 	var category = $(button).attr("data-category");
-//	data.searchActive = false;
-//	clearSearchBox();
+
 	hideSortIcons();
-//	clearCategory();
 	$(".multi_installDiv").hide();
 	getContent(false,category,description,false);
 }
@@ -660,7 +666,7 @@ function doSearch(button,newSearch) {
 	} else {
 		$("#searchBox").attr("placeholder","<?tr("Search")?>");
 	}
-	
+
 	data.docker = "";
 	data.section = "AppStore";
 //	filter = filter.replace(/[^a-z0-9-]/gi,' ')
@@ -730,7 +736,7 @@ function changeSortOrder(button,buttonClass,previousApps) {
 	if ( button || buttonClass || previousApps) {
 		data.searchActive = false;
 	}
-  if ( data.searchActive ) {
+	if ( data.searchActive ) {
 		sortOrder = [["sortBy","noSort"]];
 	}
 	$(".startupButton").each(function(){
@@ -801,7 +807,6 @@ function getContent(init,category,description,newApp,startupDisplay) {
 		}
 		if ( (category == "New") || (category == "All") ) { category = ""; }
 
-//		data.searchActive = false;
 		var filter = $('#searchBox').val();
 		var sortOrder = getSortOrder();
 		if ( ! filter ) {
@@ -815,7 +820,6 @@ function getContent(init,category,description,newApp,startupDisplay) {
 			}
 		});
 	}
-
 }
 
 function populateAutoComplete() {
@@ -903,6 +907,8 @@ function my_openBox(cmd,title,height,width,load,func) {
 	// open shadowbox window (run in foreground)
 	var run = cmd.split('?')[0].substr(-4)=='.php' ? cmd : '/logging.htm?cmd='+cmd+'&csrf_token=<?=$var['csrf_token']?>';
 	var options = load ? {modal:true,onClose:function(){ eval(func); }} : {modal:true};
+	$("#sb-title").show();
+	$("#sb-info").show();
 	Shadowbox.open({content:run, player:'iframe', title:title, height:height, width:width, options:options});
 }
 
@@ -910,6 +916,8 @@ function showDesc_openBox(cmd,title,height,width,load,func) {
 	// open shadowbox window (run in foreground)
 	var run = cmd.split('?')[0].substr(-4)=='.php' ? cmd : '/logging.htm?cmd='+cmd+'&csrf_token=<?=$var['csrf_token']?>';
 	var options = load ? {modal:false,onClose:function(){ eval(func); }} : {modal:true};
+	$("#sb-title").show();
+	$("#sb-info").show();
 	Shadowbox.open({content:run, player:'iframe', title:title, height:height, width:width, options:options});
 }
 
@@ -1152,7 +1160,7 @@ function selectAllPrevious() {
 	});
 	getSelectedApps();
 }
-		
+
 function getSelectedApps() {
 	if ( data.selected ) {
 		var selected = JSON.parse(data.selected);
@@ -1240,6 +1248,7 @@ function installSort(a,b) {
 		return (a[0] < b[0]) ? -1 : 1;
 	}
 }
+
 function deleteMulti() {
 	var selected = getSelectedApps();
 	swal({
@@ -1345,7 +1354,6 @@ function updateDisplay(data) {
 	myCloseAlert();
 }
 
-
 function saveState() {
 	if ( ! dockerSearchFlag ) {
 		<? if ( $cfg['debugging'] == "yes" ):?>
@@ -1401,7 +1409,7 @@ function restoreState() {
 	$("#searchBox").val(filter);
 	if (filter)
 		$("#searchButton").removeClass("fa-search").addClass("fa-remove");
-	
+
 	var ca_sortIcon = $.cookie("ca_sortIcon");
 	enableIcon("#sortIcon",ca_sortIcon);
 	$(".sortIcons").each(function() {
@@ -1469,8 +1477,6 @@ function caChangeLog() {
 function scrollToTop() {
 	$('html,body').animate({scrollTop:0},0);
 }
-
-
 
 function addDockerWarning(enableDisable) {
 	if (enableDisable) {
@@ -1591,7 +1597,7 @@ function getCategories() {
 		restoreStateMenu = $.cookie("ca_selectedMenu");
 		if ( ! restoreStateMenu )
 			restoreStateMenu = $.cookie("ca_startupButton");
-		
+
 		<? if ( $cfg['debugging'] == "yes" ):?>
 			console.log(restoreStateMenu);
 		<?endif;?>
@@ -1603,7 +1609,7 @@ function getCategories() {
 		$(menuItem).parent().show();
 		$(menuItem).next().show();
 		restoreStateMenu = false;
-				
+
 		if ( $("#searchBox").val() ) {
 			post({action:'getCategoriesPresent'},function(result) {
 				$(".categoryMenu").removeClass("caMenuEnabled").addClass("caMenuDisabled");
@@ -1618,7 +1624,7 @@ function getCategories() {
 					$(menuItem).addClass("selectedMenu");
 				}	else
 					$(".allApps").addClass("selectedMenu");
-				
+
 			});
 			if ($("#searchBox").val() ) {
 				$(".clearSearch").removeClass("caMenuDisabled").addClass("caMenuEnabled");
@@ -1660,7 +1666,7 @@ function CAswitchLanguage(language) {
 		var oldlanguage = '<?=$locale?>';
 	else
 		var oldlanguage = "";
-		
+
 	data.searchActive = true; // so the system doesn't resort
 	saveState();
 	$.cookie('locale',oldlanguage,{path:'/'}); // save the previous locale

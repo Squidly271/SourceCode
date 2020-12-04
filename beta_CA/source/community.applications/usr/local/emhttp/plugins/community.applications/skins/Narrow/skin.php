@@ -98,6 +98,7 @@ function my_display_apps($file,$pageNumber=1,$selectedApps=false,$startup=false)
 			} else {
 				$template['CardDescription'] = tr("No description present");
 			}
+			$template['bio'] = strip_tags(markdown($template['bio']));
 			$template['display_dockerName'] = $template['RepoName'];
 
 			if ( ! $template['DonateText'] )
@@ -865,7 +866,7 @@ function getRepoDescription($repository) {
 	$repo = $repositories[$repository];
 			
 	$t .= "<div style='width:60px;height:60px;display:inline-block;position:absolute;'><img class='popupIcon' src='{$repo['icon']}'></div>";
-	$repo['bio'] = $repo['bio'] ?: "<br><center>".tr("No description present");
+	$repo['bio'] = markdown($repo['bio']) ?: "<br><center>".tr("No description present");
 	$t .= "<div style='display:inline-block;margin-left:105px;min-height:80px;'>{$repo['bio']}</div>";
 	if ( $repo['DonateLink'] ) {
 		$donateText = $repo['DonateText'] ?: tr("Donate To Author");

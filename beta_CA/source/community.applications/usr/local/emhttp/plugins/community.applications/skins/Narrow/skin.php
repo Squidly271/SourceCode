@@ -933,7 +933,7 @@ function getRepoDescription($repository) {
 		$installLine .= "<div><a class='appIconsPopUp ca_twitter' href='{$repo['Twitter']}' target='_blank'> ".tr("Twitter")."</a></div>";
 	if ( $repo['Discord'] ) {
 		if (version_compare($caSettings['unRaidVersion'],"6.9.0-beta37",">")) {
-			$installLine .= "<div><a class='appIconsPopUp ca_discord' target='_blank' href='{$repo['Discord']}' target='_blank'> ".tr("Discord")."</a></div>";
+			$installLine .= "<div><a class='appIconsPopUp ca_discord_popup' target='_blank' href='{$repo['Discord']}' target='_blank'> ".tr("Discord")."</a></div>";
 		} else {
 			$installLine .= "<div><img src='/plugins/community.applications/images/discord-white.svg' style='height:1.5rem;'></img><a class='appIconsPopUp' style='position:absolute;' target='_blank' href='{$repo['Discord']}'> ".tr("Discord")."</a></div>";
 		}

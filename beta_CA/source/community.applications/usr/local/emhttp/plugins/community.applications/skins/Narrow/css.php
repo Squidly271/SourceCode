@@ -168,7 +168,7 @@ input[type=checkbox] {width:2rem;height:2rem;margin-right:1rem;margin-top:-.5rem
 .pinned:hover {text-decoration:none;color:<?=$unRaid66color?>;}
 .unpinned:hover {text-decoration:none;color:<?=$unRaid66color?>;}
 a.appIcons {text-decoration:none;}
-.appIconsPopUp {font-size:1.1rem;cursor:pointer;padding-left:.5rem;padding-right:.5rem;}
+.appIconsPopUp {font-size:1.1rem !important;cursor:pointer;padding-left:.5rem;padding-right:.5rem;}
 .appIconsPopUp:hover {text-decoration:none;color:<?=$unRaid66color?>;}
 .myReadmore {text-align:center;}
 .myReadmoreButton {color:blue;}
@@ -210,6 +210,7 @@ a.ca_fa-delete{text-decoration:none;margin-left:1rem;}
 .ca_showRepo::before {content:"\f002";font-family:fontAwesome;}
 <?if (version_compare($unRaidSettings['version'],"6.9.0-beta37",">")):?>
 .ca_discord::before{content:"\e988";font-family:Unraid;font-size:2.8rem;vertical-align:bottom;}
+.ca_discord_popup::before{content:"\e988";font-family:Unraid;font-size:1.5rem;vertical-align:bottom;}
 <?else:?>
 .ca_discord {height:2.9rem; margin-top:-8px;cursor:pointer;}
 <?endif;?>

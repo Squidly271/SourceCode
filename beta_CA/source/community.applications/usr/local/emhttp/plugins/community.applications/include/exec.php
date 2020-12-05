@@ -24,6 +24,7 @@ require_once "$docroot/plugins/community.applications/include/helpers.php";
 require_once "$docroot/plugins/community.applications/skins/Narrow/skin.php";
 require_once "$docroot/plugins/dynamix/include/Wrappers.php";
 require_once "$docroot/plugins/dynamix.plugin.manager/include/PluginHelpers.php";
+require_once "$docroot/webGui/include/Markdown.php";
 
 ################################################################################
 # Set up any default settings (when not explicitely set by the settings module #

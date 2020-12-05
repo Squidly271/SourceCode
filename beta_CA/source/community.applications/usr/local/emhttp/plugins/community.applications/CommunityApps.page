@@ -1705,6 +1705,7 @@ function afterRepoPopUp() {
 	if ($.cookie("ca_setFavRepo") ) {
 		$(".ca_fav").removeClass("ca_favouriteRepo").addClass("ca_non_favouriteRepo");
 		var apps = $.find('.ca_non_favouriteRepo[data-repository="'+$.cookie("ca_setFavRepo")+'"]');
+		$(".favouriteRepo").attr("data-repository",$.cookie("ca_setFavRepo"));
 		$(apps).addClass("ca_favouriteRepo");
 		setToolTipForFavourite();
 		$.cookie("ca_setFavRepo","",{path:"/"});

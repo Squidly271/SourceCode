@@ -179,9 +179,12 @@ case 'get_content':
 				continue;
 			} else continue;
 		}
-		if ( ! $template['Compatible'] && $displayIncompatible ) {
-			$display[] = $template;
-			continue;
+		
+		if ( $displayIncompatible) {
+			if ( ! $template['Compatible'] && $displayIncompatible) {
+				$display[] = $template;
+				continue;
+			} else continue;
 		}
 		if ( $template['Deprecated'] && $displayDeprecated && ! $template['Blacklist']) {
 			if ( ! $template['BranchID'] )

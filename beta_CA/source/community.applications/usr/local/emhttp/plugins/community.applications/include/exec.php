@@ -469,6 +469,7 @@ case 'previous_apps':
 
 	@unlink($caPaths['community-templates-allSearchResults']);
 	@unlink($caPaths['community-templates-catSearchResults']);
+	@unlink($caPaths['repositoriesDisplayed']);
 
 	$file = readJsonFile($caPaths['community-templates-info']);
 
@@ -721,7 +722,8 @@ case "pinnedApps":
 	$file = readJsonFile($caPaths['community-templates-info']);
 	@unlink($caPaths['community-templates-allSearchResults']);
 	@unlink($caPaths['community-templates-catSearchResults']);
-
+	@unlink($caPaths['repositoriesDisplayed']);
+	
 	foreach ($pinnedApps as $pinned) {
 		$startIndex = 0;
 		$search = explode("&",$pinned);

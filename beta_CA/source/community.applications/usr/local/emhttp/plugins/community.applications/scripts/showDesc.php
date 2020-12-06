@@ -264,6 +264,10 @@ function installPlugin(pluginURL) {
 	$.cookie("ca_installPluginURL",pluginURL,{path:"/"});
 	window.parent.Shadowbox.close();
 }
+function showRepo(repo) {
+	$.cookie("ca_profile",repo,{path:"/"});
+	window.parent.Shadowbox.close();
+}
 
 function cookiesEnabled() {
 	return evaluateBoolean(navigator.cookieEnabled);

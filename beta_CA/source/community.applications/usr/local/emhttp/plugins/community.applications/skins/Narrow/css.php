@@ -208,6 +208,7 @@ a.ca_fa-delete{text-decoration:none;margin-left:1rem;}
 .ca_reddit::before {content:"\f281";font-family:fontAwesome;}
 .ca_facebook::before {content:"\f09a";font-family:fontAwesome;}
 .ca_showRepo::before {content:"\f002";font-family:fontAwesome;}
+.ca_repository::before {content:"\f2be";font-family:fontAwesome;}
 <?if (version_compare($unRaidSettings['version'],"6.9.0-beta37",">")):?>
 .ca_discord::before{content:"\e988";font-family:Unraid;font-size:2.8rem;vertical-align:bottom;}
 .ca_discord_popup::before{content:"\e988";font-family:Unraid;font-size:1.5rem;vertical-align:bottom;}

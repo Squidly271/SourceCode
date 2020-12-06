@@ -594,10 +594,6 @@ function getPopupDescription($appNumber) {
 	if ( $template['Repo'] == str_replace("*","'",$caSettings['favourite']) )
 		$templateDescription .= "&nbsp;<span class='ca_favourite' title='".tr("Favourite Repository")."'></span>";
 
-	if ( $template['Profile'] ) {
-		$profileDescription = $template['Plugin'] ? tr("Author") : tr("Maintainer");
-		$templateDescription .= "<span>&nbsp;&nbsp;<a class='popUpLink' href='{$template['Profile']}' target='_blank'>$profileDescription Profile</a></span>";
-	}
 	$templateDescription .= "</td></tr>";
 	$templateDescription .= ($template['Private'] == "true") ? "<tr><td></td><td><font color=red>Private Repository</font></td></tr>" : "";
 	$templateDescription .= ( $dockerVars['DOCKER_AUTHORING_MODE'] == "yes"  && $template['TemplateURL']) ? "<tr><td></td><td><a class='popUpLink' href='{$template['TemplateURL']}' target='_blank'>".tr("Application Template")."</a></td></tr>" : "";
@@ -747,7 +743,7 @@ function getPopupDescription($appNumber) {
 		$installLine .= $template['Support'] ? "<div><a class='appIconsPopUp ca_fa-support' href='".$template['Support']."' target='_blank'> $supportText</strong></a></div>" : "";
 		$installLine .= $template['Project'] ? "<div><a class='appIconsPopUp ca_fa-project' href='".$template['Project']."' target='_blank'> ".tr("Project")."</strong></a></div>" : "";
 	}
-
+	$installLine .= "<div><a class='appIconsPopUp ca_repository' onclick='showRepo(&quot;".htmlentities($template['RepoName'],ENT_QUOTES)."&quot;);';> ".tr("Profile")."</a></div>";
 	$installLine .= "</div>";
 
 	if ( $installLine ) {
@@ -864,7 +860,7 @@ function getRepoDescription($repository) {
 	$repo = $repositories[$repository];
 			
 	$t .= "<div style='width:60px;height:60px;display:inline-block;position:absolute;'><img class='popupIcon' src='{$repo['icon']}'></div>";
-	$repo['bio'] = markdown($repo['bio']) ?: "<br><center>".tr("No description present");
+	$repo['bio'] = $repo['bio'] ? markdown($repo['bio']) : "<br><center>".tr("No description present");
 	$t .= "<div style='display:inline-block;margin-left:105px;min-height:80px;'>{$repo['bio']}</div>";
 	if ( $repo['DonateLink'] ) {
 		$donateText = $repo['DonateText'] ?: tr("Donate To Author");

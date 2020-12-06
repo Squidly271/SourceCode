@@ -268,7 +268,7 @@ function my_display_apps($file,$pageNumber=1,$selectedApps=false,$startup=false)
 
 			$template['display_faWarning'] = $template['display_warning-text'] ? "<span class='ca_tooltip-warning ca_fa-warning $warningColor' title='".htmlspecialchars($template['display_warning-text'],ENT_COMPAT | ENT_QUOTES)."'></span>" : "";
 
-			$template['display_author'] = "<a class='ca_tooltip ca_author' onclick='doSearch(false,this.innerText);' title='".sprintf(tr("Search for more applications from %s"),$template['SortAuthor'])."'>".$template['Repo']."</a>";
+		$template['display_repoName'] = "<a class='ca_tooltip ca_repoPopup' title='".tr("Show Profile")."' data-repository='".htmlentities($template['RepoName'],ENT_QUOTES)."'>".$template['Repo']."</a>";
 			$displayIcon = $template['Icon'];
 			$displayIcon = $displayIcon ? $displayIcon : "/plugins/dynamix.docker.manager/images/question.png";
 			$template['display_iconSelectable'] = "<img class='$iconClass' src='$displayIcon'>";
@@ -583,7 +583,6 @@ function getPopupDescription($appNumber) {
 	$tableClass = $template['Language'] ? "<table class='popupTableAreaLanguage']>" : $tableClass;
 	$templateDescription .= $tableClass;
 	$author = $template['PluginURL'] ? $template['PluginAuthor'] : $template['SortAuthor'];
-	$author .= $template['Recommended'] ? "&nbsp;&nbsp;<span class='ca_thumbsup' style='cursor:default;'></span>" : "";
 	$templateDescription .= "<tr><td style='width:25%;'>".tr("Author:")."</td><td>$author</a></td></tr>";
 	if ( ! $template['Plugin'] && ! $template['Language']) {
 		$templateDescription .= "<tr><td>".tr("DockerHub:")."</td><td><a class='popUpLink' href='{$template['Registry']}' target='_blank'>{$template['Repository']}</a></td></tr>";
@@ -973,7 +972,7 @@ function displayCard($template) {
 						{$template['display_Private']}
 						<br>
 						<span class='ca_author'>
-							{$template['display_author']}
+							{$template['display_repoName']}
 						</span>
 						<br>
 						<span class='ca_categories'>

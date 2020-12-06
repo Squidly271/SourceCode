@@ -149,7 +149,7 @@ table tbody td {line-height:1.4rem;}
 .ca_highlight {color:#0e5d08;font-weight:bold;}
 .ca_description {color:#505E6F;}
 a.ca_appPopup {text-decoration:none;cursor:pointer;}
-.ca_repoPopup {text-docoration:none;cursor:pointer;}
+.ca_repoPopup {text-decoration:none!important;cursor:pointer;color:inherit;}
 input[type=checkbox] {width:2rem;height:2rem;margin-right:1rem;margin-top:-.5rem;margin-left:0rem;}
 .enabledIcon {cursor:pointer;color:<?=$unRaid66color?>;}
 .disabledIcon {color:#040404;font-size:2.5rem;}

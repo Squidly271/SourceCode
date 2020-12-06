@@ -906,9 +906,6 @@ function installPlugin(pluginURL) {
 function my_openBox(cmd,title,height,width,load,func) {
 	// open shadowbox window (run in foreground)
 	var run = cmd.split('?')[0].substr(-4)=='.php' ? cmd : '/logging.htm?cmd='+cmd+'&csrf_token=<?=$var['csrf_token']?>';
-	var options = load ? {modal:true,onClose:function(){ eval(func); }} : {modal:true};
-	$("#sb-title").show();
-	$("#sb-info").show();
 	Shadowbox.open({content:run, player:'iframe', title:title, height:height, width:width, options:options});
 }
 
@@ -916,8 +913,6 @@ function showDesc_openBox(cmd,title,height,width,load,func) {
 	// open shadowbox window (run in foreground)
 	var run = cmd.split('?')[0].substr(-4)=='.php' ? cmd : '/logging.htm?cmd='+cmd+'&csrf_token=<?=$var['csrf_token']?>';
 	var options = load ? {modal:false,onClose:function(){ eval(func); }} : {modal:true};
-	$("#sb-title").show();
-	$("#sb-info").show();
 	Shadowbox.open({content:run, player:'iframe', title:title, height:height, width:width, options:options});
 }
 
@@ -1105,7 +1100,7 @@ function setPageOne() {
 }
 
 function clearCategory() {
-	$("#Category").html("");
+	$("#Category").html("&nbsp;");
 }
 
 function pinnedApps() {

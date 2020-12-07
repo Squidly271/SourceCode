@@ -926,7 +926,7 @@ function getRepoDescription($repository) {
 	if ( $repo['Facebook'] )
 		$installLine .= "<div><a class='appIconsPopUp ca_facebook' href='{$repo['Facebook']}' target='_blank'> ".tr("Facebook")."</a></div>";
 	if ( $repo['Reddit'] )
-		$installLine .= "<div><a class='appIconsPopUp ca_reddit' href='{$repo['Facebook']}' target='_blank'> ".tr("Reddit")."</a></div>";
+		$installLine .= "<div><a class='appIconsPopUp ca_reddit' href='{$repo['Reddit']}' target='_blank'> ".tr("Reddit")."</a></div>";
 	if ( $repo['Twitter'] )
 		$installLine .= "<div><a class='appIconsPopUp ca_twitter' href='{$repo['Twitter']}' target='_blank'> ".tr("Twitter")."</a></div>";
 	if ( $repo['Discord'] ) {

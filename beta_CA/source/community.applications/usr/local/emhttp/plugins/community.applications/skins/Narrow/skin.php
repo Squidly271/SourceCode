@@ -94,7 +94,7 @@ function my_display_apps($file,$pageNumber=1,$selectedApps=false,$startup=false)
 			$template['display_infoIcon'] = "<a class='appIcons ca_repoinfo ca_tooltip' title='".tr("Click for more information")."' data-repository='".htmlentities($template['RepoName'],ENT_QUOTES)."'></a>";
 
 			if ( $template['bio'] ) {
-				$template['CardDescription'] = (strlen($template['bio']) > 240) ? substr($template['bio'],0,240)." ..." : $template['bio'];
+				$template['CardDescription'] = (strlen($template['bio']) > 240) ? substr($template['bio'],0,240)." ... <a class='ca_reporeadmore' data-repository='".htmlentities($template['RepoName'],ENT_QUOTES)."'> ".tr("Read more")."</a>" : $template['bio'];
 			} else {
 				$template['CardDescription'] = tr("No description present");
 			}
@@ -268,7 +268,7 @@ function my_display_apps($file,$pageNumber=1,$selectedApps=false,$startup=false)
 
 			$template['display_faWarning'] = $template['display_warning-text'] ? "<span class='ca_tooltip-warning ca_fa-warning $warningColor' title='".htmlspecialchars($template['display_warning-text'],ENT_COMPAT | ENT_QUOTES)."'></span>" : "";
 
-		$template['display_repoName'] = "<a class='ca_tooltip ca_repoPopup' title='".tr("Show Profile")."' data-repository='".htmlentities($template['RepoName'],ENT_QUOTES)."'>".$template['Repo']."</a>";
+			$template['display_repoName'] = "<a class='ca_tooltip ca_repoPopup' title='".tr("Show Profile")."' data-repository='".htmlentities($template['RepoName'],ENT_QUOTES)."'>".$template['Repo']."</a>";
 			$displayIcon = $template['Icon'];
 			$displayIcon = $displayIcon ? $displayIcon : "/plugins/dynamix.docker.manager/images/question.png";
 			$template['display_iconSelectable'] = "<img class='$iconClass' src='$displayIcon'>";
@@ -291,6 +291,9 @@ function my_display_apps($file,$pageNumber=1,$selectedApps=false,$startup=false)
 				}
 			}
 
+			if ( endsWith($template['CardDescription'],"...") ) {
+				$template['CardDescription'] .= "<a class='ca_appreadmore ca_appPopup' data-appNumber='$ID' data-appPath='{$template['Path']}' data-appName='{$template['Name']}' data-beta='$appInfoBeta'> ".tr("Read more")."</a>";
+			}
 			$template['display_dockerName'] = "<span class='ca_applicationName'>";
 			$template['display_dockerName'] .= $template['Name_highlighted'] ?: $template['Name'];
 			$template['display_dockerName'] .= "</span>";

@@ -484,14 +484,14 @@ function moderateTemplate($template,$moderation,$repositories) {
 		$statistics['fixedTemplates'][$template['Repo']][$template['Repository']][] = "Not a valid Registry entry set.  Creating from Repository setting";
 		$statistics['caFixed']++;
 	}
-	if ( ! $template['Plugin'] && ( $official == "_" || explode("/",$template['Repository'])[0] == "library" ) ) {
+/* 	if ( ! $template['Plugin'] && ( $official == "_" || explode("/",$template['Repository'])[0] == "library" ) ) {
 		$template['Recommended'] = true;
-	}
+	} */
 
-	$dockerHubName = explode(":",end(explode("/",$template['Repository'])))[0];
+/* 	$dockerHubName = explode(":",end(explode("/",$template['Repository'])))[0];
 	if ( $template['Author'] == alphaNumeric($dockerHubName) || $template['Author'] == strtolower(alphaNumeric($template['Name'])) ) {
 		$template['Recommended'] = true;
-	}
+	} */
 
 	
 	if ( !is_string($template['Overview']) ) {
@@ -956,9 +956,9 @@ if ( ! $moderation ) {
 echo "\nDownloading repository blacklist";
 $blacklistRepo = readJsonFile($appPaths['BlacklistRepo']);
 
-echo "\nDownloading Recommended Apps";
+/* echo "\nDownloading Recommended Apps";
 download_url($appPaths['recommendedURL'],$appPaths['recommended']);
-$recommendedApps = array_flip(file($appPaths['recommended'],FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES));
+$recommendedApps = array_flip(file($appPaths['recommended'],FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES)); */
 echo "\nDownloading en_US language Pack";
 exec("mkdir -p {$appPaths['languageFiles']}");
 download_url("https://github.com/unraid/lang-en_US/archive/master.zip",$appPaths['languageZip']);
@@ -1064,7 +1064,7 @@ foreach ($repositories as $repo) {
 			$o['Repo'] = $repo['name'];
 			$o['RepoURL'] = $repo['url'];
 			$o['Forum'] = $repo['forum'];
-			$o['Recommended'] = $repo['recommended'];
+//			$o['Recommended'] = $repo['recommended'];
 			$o['Support'] = $o['Support'] ?: $o['Forum'];
 			if ( !is_string($template['Overview']) ) {
 				unset($template['Overview']);
@@ -1194,7 +1194,7 @@ foreach ($repositories as $repo) {
 				$o['ModeratorComment'] = $repo['RepoComment']; 
 			}
 			
-			if ( $o['Repository'] && isset($recommendedApps[$o['Repository']]) ) $o['Recommended'] = true;
+//			if ( $o['Repository'] && isset($recommendedApps[$o['Repository']]) ) $o['Recommended'] = true;
 			
 			$o = moderateTemplate($o,$moderation,$repositories);
 

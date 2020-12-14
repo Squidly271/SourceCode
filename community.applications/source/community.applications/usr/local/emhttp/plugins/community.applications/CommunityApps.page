@@ -94,6 +94,7 @@ function tr($string,$ret=false) {
 var searchBoxInput;
 var searchBoxAwesomplete;
 var pluginInstallIntervalTimer;
+var showRepoIntervalTimer;
 
 var data = new Object();
 data.docker = "";
@@ -203,6 +204,11 @@ $(function(){
 		var beta = " "+$(this).data("beta");
 		appname = stripTags(appname);
 		showDesc_openBox("/plugins/community.applications/scripts/showDesc.php?appNumber="+appnumber+"&appPath="+apppath+"&appName="+appname+"'",appname+beta,450,650,true,"checkForPluginInstallRequested()");
+	});
+
+	$(".mainArea").on("click",".ca_repoPopup,.ca_repoinfo,.ca_reporeadmore",function() {
+		var repository = $(this).data("repository");
+		showDesc_openBox("/plugins/community.applications/scripts/showRepo.php?repository="+repository,repository,450,650,true,"afterRepoPopUp();");
 	});
 
 	$('.mainArea').on("click",".unpinned,.pinned",function() {
@@ -377,7 +383,7 @@ $(function(){
 		updateLanguage($(this).data("language"));
 	});
 
-<?if ( version_compare($unRaidSettings['version'],"6.9.0-beta37","<") ):?>
+<?if ( version_compare($unRaidSettings['version'],"6.9.0-beta38","<") ):?>
 	$('.mainArea').on("mouseover",".ca_discord",function() {
 		$(this).attr("src","/plugins/community.applications/images/discord-hover.svg");
 	});
@@ -531,14 +537,28 @@ function setToolTip() {
 function checkForPluginInstallRequested() {
 	var pluginURL = $.cookie("ca_installPluginURL");
 	var language = $.cookie("ca_languageSwitch");
+	var profile = $.cookie("ca_profile");
+	
 	if ( pluginURL ) {
 		pluginInstallIntervalTimer = setInterval(modalPluginInstall,100);
+	}
+	if (profile) {
+		showRepoIntervalTimer = setInterval(modalShowRepo,100);
 	}
 	if ( language ) {
 		CAswitchLanguage(language);
 	}
 }
 
+function modalShowRepo() {
+	if ( ! $("#sb-container").is(":visible") ) {
+		clearInterval(showRepoIntervalTimer);
+		var profile = $.cookie("ca_profile");
+		$.removeCookie("ca_profile");
+		showDesc_openBox("/plugins/community.applications/scripts/showRepo.php?repository="+profile,profile,450,650,true,"afterRepoPopUp();");
+	}
+}
+	
 function modalPluginInstall() {
 	if ( ! $("#sb-container").is(":visible") ) {
 		clearInterval(pluginInstallIntervalTimer);
@@ -901,7 +921,6 @@ function installPlugin(pluginURL) {
 function my_openBox(cmd,title,height,width,load,func) {
 	// open shadowbox window (run in foreground)
 	var run = cmd.split('?')[0].substr(-4)=='.php' ? cmd : '/logging.htm?cmd='+cmd+'&csrf_token=<?=$var['csrf_token']?>';
-	var options = load ? {modal:true,onClose:function(){ eval(func); }} : {modal:true};
 	Shadowbox.open({content:run, player:'iframe', title:title, height:height, width:width, options:options});
 }
 
@@ -1096,7 +1115,7 @@ function setPageOne() {
 }
 
 function clearCategory() {
-	$("#Category").html("");
+	$("#Category").html("&nbsp;");
 }
 
 function pinnedApps() {
@@ -1692,6 +1711,22 @@ function setToolTipForFavourite() {
 	});
 }
 
+function afterRepoPopUp() {
+	if ($.cookie("ca_setFavRepo") ) {
+		$(".ca_fav").removeClass("ca_favouriteRepo").addClass("ca_non_favouriteRepo");
+		var apps = $.find('.ca_non_favouriteRepo[data-repository="'+$.cookie("ca_setFavRepo")+'"]');
+		$(".favouriteRepo").attr("data-repository",$.cookie("ca_setFavRepo"));
+		$(apps).addClass("ca_favouriteRepo");
+		$(".favouriteRepo").addClass("caMenuEnabled").removeClass("caMenuDisabled");
+		setToolTipForFavourite();
+		$.cookie("ca_setFavRepo","",{path:"/"});
+	}
+	if ($.cookie("ca_searchRepo") ) {
+		var repo = $.cookie("ca_searchRepo");
+		$.cookie("ca_searchRepo","",{path:"/"});
+		doSearch(false,repo);
+	}
+}
 </script>
 
 > <span class='caHelpIconSpacing'><i class='fa fa-sort-alpha-asc enabledIcon' aria-hidden='true' style='font-size:2rem;'></i></span><?tr("This chooses how to sort the results");?><br>

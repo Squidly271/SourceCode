@@ -431,7 +431,7 @@ function displaySearchResults($pageNumber) {
 	foreach ($file as $result) {
 		$result['Icon'] = "/plugins/dynamix.docker.manager/images/question.png";
 		$result['display_dockerName'] = "<a class='ca_tooltip ca_applicationName' style='cursor:pointer;' onclick='mySearch(this.innerText);' title='".tr("Search for similar containers")."'>{$result['Name']}</a>";
-		$result['display_author'] = "<a class='ca_tooltip ca_author' onclick='mySearch(this.innerText);' title='".sprintf(tr("Search For Containers From %s"),$result['Author'])."'>{$result['Author']}</a>";
+		$result['display_dockerauthor'] = "<a class='ca_tooltip ca_author' onclick='mySearch(this.innerText);' title='".sprintf(tr("Search For Containers From %s"),$result['Author'])."'>{$result['Author']}</a>";
 		$result['Category'] = "Docker Hub Search";
 		$result['display_iconClickable'] = "<i class='displayIcon fa fa-docker'></i>";
 		$result['Description'] = $result['Description'] ?: "No description present";
@@ -975,7 +975,7 @@ function displayCard($template) {
 						{$template['display_Private']}
 						<br>
 						<span class='ca_author'>
-							{$template['display_repoName']}
+							{$template['display_repoName']}{$template['display_dockerauthor']}
 						</span>
 						<br>
 						<span class='ca_categories'>

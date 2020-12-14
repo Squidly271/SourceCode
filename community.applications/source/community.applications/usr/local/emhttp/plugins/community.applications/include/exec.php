@@ -24,6 +24,7 @@ require_once "$docroot/plugins/community.applications/include/helpers.php";
 require_once "$docroot/plugins/community.applications/skins/Narrow/skin.php";
 require_once "$docroot/plugins/dynamix/include/Wrappers.php";
 require_once "$docroot/plugins/dynamix.plugin.manager/include/PluginHelpers.php";
+require_once "$docroot/webGui/include/Markdown.php";
 
 ################################################################################
 # Set up any default settings (when not explicitely set by the settings module #
@@ -178,9 +179,12 @@ case 'get_content':
 				continue;
 			} else continue;
 		}
-		if ( ! $template['Compatible'] && $displayIncompatible ) {
-			$display[] = $template;
-			continue;
+		
+		if ( $displayIncompatible) {
+			if ( ! $template['Compatible'] && $displayIncompatible) {
+				$display[] = $template;
+				continue;
+			} else continue;
 		}
 		if ( $template['Deprecated'] && $displayDeprecated && ! $template['Blacklist']) {
 			if ( ! $template['BranchID'] )
@@ -465,6 +469,7 @@ case 'previous_apps':
 
 	@unlink($caPaths['community-templates-allSearchResults']);
 	@unlink($caPaths['community-templates-catSearchResults']);
+	@unlink($caPaths['repositoriesDisplayed']);
 
 	$file = readJsonFile($caPaths['community-templates-info']);
 
@@ -717,7 +722,8 @@ case "pinnedApps":
 	$file = readJsonFile($caPaths['community-templates-info']);
 	@unlink($caPaths['community-templates-allSearchResults']);
 	@unlink($caPaths['community-templates-catSearchResults']);
-
+	@unlink($caPaths['repositoriesDisplayed']);
+	
 	foreach ($pinnedApps as $pinned) {
 		$startIndex = 0;
 		$search = explode("&",$pinned);
@@ -962,6 +968,14 @@ case 'getPopupDescription':
 	$appNumber = getPost("appPath","");
 	postReturn(getPopupDescription($appNumber));
 	break;
+	
+#################################
+# Get the html for a repo popup #
+#################################
+case 'getRepoDescription':
+	$repository = html_entity_decode(getPost("repository",""),ENT_QUOTES);
+	postReturn(getRepoDescription($repository));
+	break;
 
 ###########################################
 # Creates the XML for a container install #
@@ -1127,7 +1141,7 @@ case 'getCategoriesPresent':
 # Set's the favourite repository #
 ##################################
 case 'toggleFavourite':
-	$repository = getPost("repository","");
+	$repository = html_entity_decode(getPost("repository",""),ENT_QUOTES);
 
 	$caSettings['favourite'] = $repository;
 	write_ini_file($caPaths['pluginSettings'],$caSettings);
@@ -1184,6 +1198,17 @@ function DownloadApplicationFeed() {
 			$invalidXML[] = $o;
 			continue;
 		}
+		unset($o['Category']);
+		if ( $o['CategoryList'] ) {
+			foreach ($o['CategoryList'] as $cat) {
+				$cat = str_replace("-",":",$cat);
+				if ( ! strpos($cat,":") ) 
+					$cat .= ":";
+				$o['Category'] .= "$cat ";
+			}
+		}
+		$o['Category'] = trim($o['Category']);
+		
 		if ( $o['Language'] ) {
 			$o['Category'] = "Language:";
 			$o['Compatible'] = true;

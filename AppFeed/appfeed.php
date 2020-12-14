@@ -23,6 +23,7 @@ $appPaths['lastUpdated']     = "/tmp/GitHub/AppFeed/applicationFeed-lastUpdated.
 $appPaths['firstSeen']       = "/tmp/GitHub/AppFeed/firstSeen.json";
 $appPaths['repoInfo']        = "/tmp/GitHub/AppFeed/repoInfo.json";
 $appPaths['caVersion']       = "/tmp/GitHub/AppFeed/caVersion";
+$appPaths['categoryList']    = "/tmp/GitHub/AppFeed/categoryList.json";
 $appPaths['languageZip']     = "/tmp/appFeed/language.zip";
 $appPaths['languageFiles']    = "/tmp/appFeed/language";
 $appPaths['Running']         = "/var/run/appfeed.pid";
@@ -90,6 +91,29 @@ $master_Categories = array(
 	array("Cat" => "Other:", "Des" => "Other"),
 	array("Cat" => "Plugins:", "Des" => "Plugins")
 );
+
+function categoryJson() {
+	global $master_Categories;
+	
+	foreach ($master_Categories as $cat) {
+		if ( is_array($cat['Sub']) ) {
+			$tmp = $cat;
+			unset($tmp['Sub']);
+			$o[] = $tmp;
+			foreach ($cat['Sub'] as $subcat) {
+				$tmp = $subcat;
+				$tmp['Cat'] = str_replace(":","-",$tmp['Cat']);
+				$tmp['parentCat'] = rtrim($cat['Cat'],":");
+				$o[] = $tmp;
+			}
+		} else {
+			$tmp = $cat;
+			$tmp['Cat'] = rtrim($tmp['Cat'],":");
+			$o[] = $tmp;
+		}
+	}
+	return $o;
+}
 
 function getRedirectedURL($url) {
 	$ch = curl_init();
@@ -1011,7 +1035,7 @@ foreach ($repositories as $repo) {
 					$repoList[$repo['name']]['DonateLink'] = trim($o['DonateLink']);
 					$repoList[$repo['name']]['DonateText'] = trim($o['DonateText']);
 				}
-
+	
 				if (validURL($o['Facebook'])) $repoList[$repo['name']]['Facebook'] = $o['Facebook'];
 				if (validURL($o['Reddit'])) $repoList[$repo['name']]['Reddit'] = $o['Reddit'];
 				if (validURL($o['Forum'])) $repoList[$repo['name']]['Forum'] = $o['Forum'];
@@ -1109,7 +1133,7 @@ foreach ($repositories as $repo) {
 			$o['Forum'] = validURL($o['Forum']) ?: "";
 			$o['DonateLink'] = validURL($o['DonateLink']) ?: $repo['donatelink'];
 			$o['DonateText'] = $o['DonateText'] ?: $repo['DonateText'];
-			$o['Profile'] = $repo['profile'];
+//			$o['Profile'] = $repo['profile'];  Being handled via the repository list instead
 			$o['ModeratorComment'] = $o['ModeratorComment'] ?: $repo['RepoComment'];
 			$o['Deprecated'] = $o['Deprecated'] ?: $repo['Deprecated'];
 			$o['WebPageURL']       = $repo['web'];
@@ -1190,7 +1214,7 @@ foreach ($repositories as $repo) {
 			$o['DonateText'] = str_replace("'","&#39;",$o['DonateText']);
 			$o['DonateText'] = str_replace('"','&quot;',$o['DonateText']);
 			if ( !$o['DonateText'] ) unset($o['DonateText']);
-			
+
 			if ( ( stripos($o['Repo'],' beta') > 0 )  ) {
 				$template['Beta'] = "true";
 			}
@@ -1225,6 +1249,21 @@ foreach ($repositories as $repo) {
 				continue;
 			}
 			$o['templatePath'] = str_replace($appPaths['Root'],"/tmp/GitHub/AppFeed",$xmlFile);
+			
+################################################
+################################################
+### Category list for web version ##############
+			$tmp = trim(str_replace("Status:Beta","",str_replace("Other:Uncategorized","",$o['Category'])));
+
+			if ( $tmp ) {
+				foreach (explode(" ",$tmp) as $CAT) {
+					$CAT = rtrim(trim($CAT),":");
+					$CAT = str_replace(":","-",$CAT);
+					$o['CategoryList'][] = $CAT;
+				}
+	//			$o['CategoryList'] = explode(" ",$tmp);
+				
+			}
 			$apps[] = $o;
 
 			echo "Success\n";
@@ -1393,6 +1432,7 @@ foreach ($apps as &$app) {
 	unset($template['SortName']);
 	unset($template['OriginalOverview']);
 	unset($template['OriginalDescription']);
+	unset($template['CategoryList']);
 	
 	$xml = makeXML($template);
 	exec("mkdir -p ".escapeshellarg(dirname($template['templatePath'])));
@@ -1463,10 +1503,12 @@ writeJsonFile($appPaths['firstSeen'],$firstSeen);
 writeJsonFile($appPaths['repoInfo'],$repoInfo);
 writeJsonFile($appPaths['statistics'],$statistics);
 writeJsonFile($appPaths['languageErrors'],$languageErrors);
+writeJsonFile($appPaths['categoryList'],categoryJson());
 
 echo "\nUpdating GitHub\n\n";
 passthru("/tmp/GitHub/SourceCode/AppFeed/appsthread.php");
 passthru("/tmp/GitHub/SourceCode/AppFeed/languageHTML.php");
+passthru("/tmp/GitHub/SourceCode/AppFeed/createRepoJson.php");
 passthru("/tmp/GitHub/SourceCode/AppFeed/updateGit.sh");
 
 @unlink($appPaths['Running']);

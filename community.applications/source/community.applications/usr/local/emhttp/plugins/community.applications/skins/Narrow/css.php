@@ -149,6 +149,12 @@ table tbody td {line-height:1.4rem;}
 .ca_highlight {color:#0e5d08;font-weight:bold;}
 .ca_description {color:#505E6F;}
 a.ca_appPopup {text-decoration:none;cursor:pointer;}
+.ca_repoPopup {text-decoration:none!important;cursor:pointer;color:inherit;}
+a.ca_repoPopup:hover {color:<?=$unRaid66color?>;}
+a.ca_reporeadmore {cursor:pointer;text-decoration:none;}
+a.ca_appreadmore {cursor:pointer;text-decoration:none;}
+a.ca_reporeadmore:hover {color:<?=$unRaid66color?>;}
+a.ca_appreadmore:hover {color:<?=$unRaid66color?>;}
 input[type=checkbox] {width:2rem;height:2rem;margin-right:1rem;margin-top:-.5rem;margin-left:0rem;}
 .enabledIcon {cursor:pointer;color:<?=$unRaid66color?>;}
 .disabledIcon {color:#040404;font-size:2.5rem;}
@@ -167,7 +173,7 @@ input[type=checkbox] {width:2rem;height:2rem;margin-right:1rem;margin-top:-.5rem
 .pinned:hover {text-decoration:none;color:<?=$unRaid66color?>;}
 .unpinned:hover {text-decoration:none;color:<?=$unRaid66color?>;}
 a.appIcons {text-decoration:none;}
-.appIconsPopUp {font-size:1.1rem;cursor:pointer;padding-left:.5rem;padding-right:.5rem;}
+.appIconsPopUp {font-size:1.1rem !important;cursor:pointer;padding-left:.5rem;padding-right:.5rem;}
 .appIconsPopUp:hover {text-decoration:none;color:<?=$unRaid66color?>;}
 .myReadmore {text-align:center;}
 .myReadmoreButton {color:blue;}
@@ -198,6 +204,7 @@ a.ca_fa-delete{text-decoration:none;margin-left:1rem;}
 .ca_fa-globe::before {content:"\f0ac";font-family:fontAwesome;}
 .ca_fa-update::before {content:"\f0ed";font-family:fontAwesome;}
 .ca_fa-info::before {content:"\f05a";font-family:fontAwesome;}
+.ca_repoinfo::before {content:"\f05a";font-family:fontAwesome;}
 .ca_fa-warning::before {content:"\f071";font-family:fontAwesome;}
 .ca_fa-switchto::before {content:"\e982";font-family:Unraid;}
 .ca_favourite::before {content:"\f2be";font-family:fontAwesome;color:#1fa67a;}
@@ -205,8 +212,11 @@ a.ca_fa-delete{text-decoration:none;margin-left:1rem;}
 .ca_twitter::before {content:"\f099";font-family:fontAwesome;}
 .ca_reddit::before {content:"\f281";font-family:fontAwesome;}
 .ca_facebook::before {content:"\f09a";font-family:fontAwesome;}
-<?if (version_compare($unRaidSettings['version'],"6.9.0-beta37",">=")):?>
+.ca_showRepo::before {content:"\f002";font-family:fontAwesome;}
+.ca_repository::before {content:"\f2be";font-family:fontAwesome;}
+<?if (version_compare($unRaidSettings['version'],"6.9.0-beta37",">")):?>
 .ca_discord::before{content:"\e988";font-family:Unraid;font-size:2.8rem;vertical-align:bottom;}
+.ca_discord_popup::before{content:"\e988";font-family:Unraid;font-size:1.5rem;vertical-align:bottom;}
 <?else:?>
 .ca_discord {height:2.9rem; margin-top:-8px;cursor:pointer;}
 <?endif;?>

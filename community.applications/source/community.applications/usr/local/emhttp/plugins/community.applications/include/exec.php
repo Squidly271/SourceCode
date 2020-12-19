@@ -884,12 +884,12 @@ case 'populateAutoComplete':
 				$autoComplete[$template['Repo']] = $template['Repo'];
 			}
 			$name = trim(strtolower($template['SortName']));
-			$autoComplete[$name] = str_ireplace($template['Author']."-","",$name);
-			$autoComplete[$name] = str_ireplace($template['Author']." ","",$autoComplete[$name]);
-			if ( startsWith($autoComplete[$name],"Dynamix ") )
-				$autoComplete[$name] = str_replace("Dynamix ","",$autoComplete[$name]);
-			if ( startsWith($autoComplete[$name],"CA ") )
-				$autoComplete[$name] = str_replace("CA ","",$autoComplete[$name]);
+			$autoComplete[$name] = str_ireplace(strtolower($template['Author'])."-","",$name);
+			$autoComplete[$name] = str_ireplace(strtolower($template['Author'])." ","",$autoComplete[$name]);
+			if ( startsWith($autoComplete[$name],"dynamix ") )
+				$autoComplete[$name] = str_replace("dynamix ","",$autoComplete[$name]);
+			if ( startsWith($autoComplete[$name],"ca ") )
+				$autoComplete[$name] = str_replace("ca ","",$autoComplete[$name]);
 
 			if ( $template['Plugin'] )
 				$autoComplete[strtolower($template['Author'])] = $template['Author'];

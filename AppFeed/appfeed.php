@@ -652,11 +652,13 @@ function moderateTemplate($template,$moderation,$repositories) {
 		} else {
 			$template['Icon'] = $effectiveURL;
 		}
-		if ( $effectiveURL === false) {
+		
+# tired of apps coming and going with the IconURL as sites hosting are shit
+/* 		if ( $effectiveURL === false) {
 			if ( ! is_file($appPaths['iconTMP']) ) {
 				unset($template['Icon']);
 			}
-		}
+		} */
 		if (pathinfo($filename,PATHINFO_EXTENSION) !== "svg") {
 			if ( ! @getimagesize($appPaths['iconTMP']) ) {
 				@unlink($appPaths['iconTMP']);

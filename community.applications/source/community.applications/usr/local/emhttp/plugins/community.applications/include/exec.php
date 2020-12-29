@@ -1477,8 +1477,10 @@ function displayRepositories() {
 		$temp = readJsonFile($caPaths['community-templates-allSearchResults']);
 		$templates = $temp['community'];
 	} else {
-		$templates = readJsonFile($caPaths['community-templates-info']);
+		$temp = readJsonFile($caPaths['community-templates-displayed']);
+		$templates = $temp['community'];
 	}
+	$templates = $templates ?: array();
 	$allRepos = array();
 	$bio = array();
 	foreach ($templates as $template) {

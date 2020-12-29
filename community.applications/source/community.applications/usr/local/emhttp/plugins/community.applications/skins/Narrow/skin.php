@@ -169,9 +169,11 @@ function my_display_apps($file,$pageNumber=1,$selectedApps=false,$startup=false)
 			$niceRepoName = str_replace("' Repository","",$niceRepoName);
 			$niceRepoName = str_replace(" Repository","",$niceRepoName);
 			$favMsg = ($favClass == "ca_favouriteRepo") ? tr("Click to remove favourite repository") : tr(sprintf("Click to set %s as favourite repository",$niceRepoName));
-
-			$template['display_favouriteButton'] = "<span class='appIcons ca_tooltip $favClass ca_fav' data-repository='".htmlentities($template['RepoName'],ENT_QUOTES)."' title='$favMsg'></span>";
-
+			
+			if ( $template['RepoName'] && ! $template['Private']) {
+				$template['display_favouriteButton'] = "<span class='appIcons ca_tooltip $favClass ca_fav' data-repository='".htmlentities($template['RepoName'],ENT_QUOTES)."' title='$favMsg'></span>";
+			}
+			
 			$template['display_ModeratorComment'] .= $template['ModeratorComment'] ? "</span></strong><font color='purple'>{$template['ModeratorComment']}</font>" : "";
 
 			if ( $pinnedApps["{$template['Repository']}&{$template['SortName']}"] ) {
@@ -268,7 +270,11 @@ function my_display_apps($file,$pageNumber=1,$selectedApps=false,$startup=false)
 
 			$template['display_faWarning'] = $template['display_warning-text'] ? "<span class='ca_tooltip-warning ca_fa-warning $warningColor' title='".htmlspecialchars($template['display_warning-text'],ENT_COMPAT | ENT_QUOTES)."'></span>" : "";
 
-			$template['display_repoName'] = "<a class='ca_tooltip ca_repoPopup' title='".tr("Show Profile")."' data-repository='".htmlentities($template['RepoName'],ENT_QUOTES)."'>".$template['Repo']."</a>";
+			if ( $template['RepoName'] && ! $template['Private']) {
+				$template['display_repoName'] = "<a class='ca_tooltip ca_repoPopup' title='".tr("Show Profile")."' data-repository='".htmlentities($template['RepoName'],ENT_QUOTES)."'>".$template['Repo']."</a>";
+			} else {
+				$template['display_author'] = $template['Author'];
+			}
 			$displayIcon = $template['Icon'];
 			$displayIcon = $displayIcon ? $displayIcon : "/plugins/dynamix.docker.manager/images/question.png";
 			$template['display_iconSelectable'] = "<img class='$iconClass' src='$displayIcon'>";
@@ -593,7 +599,7 @@ function getPopupDescription($appNumber) {
 	$templateDescription .= "<tr><td>".tr("Repository:")."</td><td>";
 	$templateDescription .= "<a class='popUpLink' href='#' onclick='showRepo(&quot;".htmlentities($template['RepoName'],ENT_QUOTES)."&quot;);';> ";
 	$templateDescription .= str_ireplace("Repository","",$template['RepoName']).tr("Repository")."</a>";
-	if ( $template['Repo'] == str_replace("*","'",$caSettings['favourite']) )
+	if ( ($template['Repo'] == str_replace("*","'",$caSettings['favourite'])) && $caSettings['favourite'] )
 		$templateDescription .= "&nbsp;<span class='ca_favourite' title='".tr("Favourite Repository")."'></span>";
 
 	$templateDescription .= "</td></tr>";
@@ -974,9 +980,7 @@ function displayCard($template) {
 						</span>
 						{$template['display_Private']}
 						<br>
-						<span class='ca_author'>
-							{$template['display_repoName']}
-						</span>
+						<span class='ca_author'>{$template['display_repoName']}</span>{$template['display_author']}
 						<br>
 						<span class='ca_categories'>
 							{$template['Category']}$language

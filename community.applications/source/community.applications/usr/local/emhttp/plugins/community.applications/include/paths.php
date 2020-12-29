@@ -17,6 +17,7 @@ $caPaths['community-templates-info']            = $caPaths['tempFiles']."/templa
 $caPaths['community-templates-displayed']       = $caPaths['tempFiles']."/displayed.json";                     /* json file containing all of the templates currently displayed */
 $caPaths['community-templates-allSearchResults']= $caPaths['tempFiles']."/allSearchResults.json";
 $caPaths['community-templates-catSearchResults']= $caPaths['tempFiles']."/catSearchResults.json";
+$caPaths['startupDisplayed']                    = $caPaths['tempFiles']."/startupDisplayed";
 $caPaths['repositoriesDisplayed']               = $caPaths['tempFiles']."/repositoriesDisplayed.json";
 $caPaths['application-feed']                    = "https://raw.githubusercontent.com/Squidly271/AppFeed/master/applicationFeed.json";
 $caPaths['application-feed-last-updated']       = "https://raw.githubusercontent.com/Squidly271/AppFeed/master/applicationFeed-lastUpdated.json";

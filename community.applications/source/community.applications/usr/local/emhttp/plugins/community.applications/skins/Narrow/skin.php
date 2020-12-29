@@ -124,7 +124,7 @@ function my_display_apps($file,$pageNumber=1,$selectedApps=false,$startup=false)
 				$template['display_webpage'] = "<a class='ca_tooltip ca_webpage appIcons' target='_blank' href='{$template['WebPage']}' title='".tr("Go to webpage")."'></a>";
 			if ( $template['profile'] )
 				$template['display_profile'] = "<a class='ca_tooltip ca_profile appIcons' target='_blank' href='{$template['profile']}' title='".tr("Go to forum profile")."'></a>";
-			$favClass = ( $caSettings['favourite'] == $template['RepoName'] ) ? "ca_favouriteRepo" : "ca_non_favouriteRepo";
+			$favClass = ( $caSettings['favourite'] && ($caSettings['favourite'] == $template['RepoName']) ) ? "ca_favouriteRepo" : "ca_non_favouriteRepo";
 			$niceRepoName = str_replace("'s Repository","",$template['RepoName']);
 			$niceRepoName = str_replace("' Repository","",$niceRepoName);
 			$niceRepoName = str_replace(" Repository","",$niceRepoName);

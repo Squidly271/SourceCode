@@ -127,6 +127,7 @@ case 'get_content':
 	if ( empty($file)) break;
 
 	if ( $category === "/NONE/i" ) {
+		file_put_contents($caPaths['startupDisplayed'],"startup");
 		$displayApplications = array();
 		if ( count($file) > 200) {
 			$appsOfDay = appOfDay($file);
@@ -160,12 +161,15 @@ case 'get_content':
 						$startupType = "Trending"; break;
 				}
 
+
 				$o['display'] =  "<br><div class='ca_center'><font size='4' color='purple'><span class='ca_bold'>".sprintf(tr("An error occurred.  Could not find any %s Apps"),$startupType)."</span></font><br><br>";
 				$o['script'] = "$('#templateSortButtons,#sortButtons').hide();enableIcon('#sortIcon',false);";
 				postReturn($o);
 				break;
 			}
 		}
+	} else {
+		@unlink($caPaths['startupDisplayed']);
 	}
 	$display  = array();
 	$official = array();
@@ -470,6 +474,7 @@ case 'previous_apps':
 	@unlink($caPaths['community-templates-allSearchResults']);
 	@unlink($caPaths['community-templates-catSearchResults']);
 	@unlink($caPaths['repositoriesDisplayed']);
+	@unlink($caPaths['startupDisplayed']);
 
 	$file = readJsonFile($caPaths['community-templates-info']);
 
@@ -723,6 +728,7 @@ case "pinnedApps":
 	@unlink($caPaths['community-templates-allSearchResults']);
 	@unlink($caPaths['community-templates-catSearchResults']);
 	@unlink($caPaths['repositoriesDisplayed']);
+	@unlink($caPaths['startupDisplayed']);
 	
 	foreach ($pinnedApps as $pinned) {
 		$startIndex = 0;
@@ -1479,6 +1485,9 @@ function displayRepositories() {
 	} else {
 		$temp = readJsonFile($caPaths['community-templates-displayed']);
 		$templates = $temp['community'];
+	}
+	if ( is_file($caPaths['startupDisplayed']) ) {
+		$templates = readJsonFile($caPaths['community-templates-info']);
 	}
 	$templates = $templates ?: array();
 	$allRepos = array();

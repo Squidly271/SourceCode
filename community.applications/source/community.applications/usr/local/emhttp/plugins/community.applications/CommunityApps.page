@@ -312,8 +312,7 @@ $(function(){
 				$(".subCategory").hide();
 			}
 		}
-
-		
+	
 		$(this).addClass("selectedMenu");
 		$(this).next().show();
 	});

@@ -136,7 +136,7 @@ li.caMenuItem {padding:0px 0px 5px 0px;}
 ul.subCategory {list-style-type:none;margin-left:2rem;padding:0px;cursor:pointer;display:none;}
 li.debugging {cursor:pointer;}
 .menuHeader { font-size:2rem; margin-bottom:1rem;margin-top:1rem;}
-.selectedMenu {color:<?=$unRaid66color?>;font-weight:bold;cursor:default;}
+.selectedMenu {color:<?=$unRaid66color?>;font-weight:bold;}
 .hoverMenu {color:<?=$unRaid66color?>;}
 table {background-color:transparent;}
 table tbody td {line-height:1.4rem;}

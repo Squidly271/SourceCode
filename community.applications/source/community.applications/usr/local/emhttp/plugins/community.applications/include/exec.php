@@ -217,6 +217,9 @@ case 'get_content':
 			foreach (explode(" ",$template['Category']) as $trCat) {
 				$template['translatedCategories'] .= tr($trCat)." ";
 			}
+			if ( endsWith($filter," Repository") && $template['RepoName'] !== $filter) {
+				continue;
+			}
 			if ( filterMatch($filter,array($template['SortName'])) && $caSettings['favourite'] == $template['RepoName']) {
 				$template['Name_highlighted'] = highlight($filter,$template['Name']);
 				$searchResults['favNameHit'][] = $template;

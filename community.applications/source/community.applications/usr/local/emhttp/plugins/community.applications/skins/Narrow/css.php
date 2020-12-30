@@ -78,7 +78,6 @@ body.stop-scrolling{height:100%;overflow:auto}  /* disable SweetAlert killing th
 
 <?if ( ! $unRaid69 ):?>
 .popupTableAreaPlugin::before{position:absolute;margin-left:20rem;font-family:'fontAwesome';content:'\f12e';font-size:10rem;color:rgba(43,43,43,0.10);z-index:-1;}
-
 <?else:?>
 .popupTableAreaPlugin::before{position:absolute;margin-left:20rem;font-family:'Unraid';content:'\e986';font-size:10rem;color:rgba(43,43,43,0.10);z-index:-1;}
 <?endif;?>
@@ -182,7 +181,6 @@ a.appIcons {text-decoration:none;}
 .donate:hover {text-decoration:none;background-color:<?=$unRaid66color?>;}
 .dockerHubStar {font-size:1rem;}
 .dockerDisabled {display:none;}
-.separateOfficial {text-align:center;width:auto;font-size:2.5rem;}
 .displayBeta {margin-left:2rem;cursor:pointer;}
 .newApp {color:red;font-size:1.5rem;cursor:pointer;}
 .ca_fa-support::before {content:"\f059";font-family:fontAwesome;}

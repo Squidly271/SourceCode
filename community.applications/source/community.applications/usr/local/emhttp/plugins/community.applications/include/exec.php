@@ -1494,6 +1494,7 @@ function displayRepositories() {
 	$bio = array();
 	foreach ($templates as $template) {
 		$repoName = $template['RepoName'];
+		if ( ! $repoName ) continue;
 		if ( $repoName == $caSettings['favourite'] ) {
 			$fav = $repositories[$repoName];
 			$fav['RepositoryTemplate'] = true;

@@ -1,8 +1,8 @@
 <?
 ###############################################################
 #                                                             #
-# Community Applications copyright 2015-2020, Andrew Zawadzki #
-#                   All rights reserved                       #
+# Community Applications copyright 2015-2021, Andrew Zawadzki #
+#                   Licenced under GPLv2                      #
 #                                                             #
 ###############################################################
 $docroot = $docroot ?? $_SERVER['DOCUMENT_ROOT'] ?: "/usr/local/emhttp";

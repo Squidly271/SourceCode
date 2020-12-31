@@ -893,8 +893,11 @@ case 'populateAutoComplete':
 				$autoComplete[$template['Repo']] = $template['Repo'];
 			}
 			$name = trim(strtolower($template['SortName']));
-			$autoComplete[$name] = str_ireplace(strtolower($template['Author'])."-","",$name);
-			$autoComplete[$name] = str_ireplace(strtolower($template['Author'])." ","",$autoComplete[$name]);
+			if ( $name !== "pihole template" ) {
+				$name = str_ireplace(strtolower($template['Author'])."-","",$name);
+				$name = str_ireplace(strtolower($template['Author'])." ","",$name);
+			}
+			$autoComplete[$name] = $name;
 			if ( startsWith($autoComplete[$name],"dynamix ") )
 				$autoComplete[$name] = str_replace("dynamix ","",$autoComplete[$name]);
 			if ( startsWith($autoComplete[$name],"ca ") )

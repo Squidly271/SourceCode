@@ -577,7 +577,9 @@ function moderateTemplate($template,$moderation,$repositories) {
 			$statistics['fixedTemplates'][$template['Repo']][$template['Repository']][] = "Fatal: Plugin URL on xml template does not match PluginURL in .plg ($URL1 vs $URL2)";
 			$template['Blacklist'] = true;
 		}
-//	$template['PluginURL'] = $URL1;
+		if ( $template['tmpPluginURL'] ) {
+			$template['PluginURL'] = $template['tmpPluginURL'];
+		}
 	}
 	if ( ! $template['Date'] ) {
 		$template['Date'] = (is_numeric($template['DateInstalled'])) ? $template['DateInstalled'] : 0;

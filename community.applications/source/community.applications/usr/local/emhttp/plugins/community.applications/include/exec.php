@@ -638,10 +638,9 @@ if ( $caSettings['dockerRunning'] ) {
 				if ( basename($oldplug) == basename($template['Repository']) ) {
 					if ( ! file_exists("/boot/config/plugins/".basename($oldplug)) ) {
 						if ( $template['Blacklist'] || ( ($caSettings['hideIncompatible'] == "true") && (! $template['Compatible']) ) ) continue;
-
-						if ( strtolower(trim($template['PluginURL'])) != strtolower(trim(plugin("pluginURL","$oldplug"))) ) {
-							if ( strtolower(trim($template['PluginURL'])) != strtolower(trim(str_replace("raw.github.com","raw.githubusercontent.com",plugin("pluginURL",$oldplug)))) )
-								continue;
+						$oldPlugURL = trim(plugin("pluginURL",$oldplug));
+						if ( strtolower(trim($template['PluginURL'])) != strtolower(trim($oldPlugURL)) ) {
+							continue;
 						}
 						$template['Removable'] = true;
 						$template['InstallPath'] = $oldplug;

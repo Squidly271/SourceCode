@@ -1,23 +1,5 @@
 #!/usr/bin/php
 <?php
-/* echo "This script tests every repository to see if it can be downloaded.  This will take quite a while\n\n";
-$templates = json_decode(file_get_contents("/tmp/community.applications/tempFiles/templates.json"),true);
-
-foreach ($templates as $template) {
-        if ($template['Plugin'] || $template['LanguageURL']) {
-                continue;
-        }
-        if ( $template['Blacklist'] || $template['BranchID'] ) { continue; }
-        echo "Pulling {$template['Repository']}\n";
-        exec("timeout -s9 5 docker pull {$template['Repository']}",$output,$error);
-        if ( $error && $error != 9) {
-                $downloadError .= "{$template['Repository']}\n";
-        }
-        exec("docker rmi {$template['Repository']}> /dev/null 2>&1");
-}
-echo "The following repositories could not be downloaded:\n\n$downloadError\n\n  It is recommended to delete and recreate the docker.img after running this script\n";*/
-############################################################################
-
 $feed = json_decode(file_get_contents("/tmp/GitHub/AppFeed/applicationFeed.json"),true);
 $templates = $feed['applist'];
 $index = @file_get_contents("/tmp/GitHub/AppFeed/lastcheckIndex");

@@ -90,6 +90,7 @@ function my_display_apps($file,$pageNumber=1,$selectedApps=false,$startup=false)
 				}
 			}
 
+			$template['icon'] = $template['icon'] ?: "/plugins/dynamix.docker.manager/images/question.png";
 			$template['display_iconClickable'] = "<img class='displayIcon ca_tooltip ca_repoPopup' title='".tr("Click for more information")."' src='{$template['icon']}' data-repository='".htmlentities($template['RepoName'],ENT_QUOTES)."'></img>";
 			$template['display_infoIcon'] = "<a class='appIcons ca_repoinfo ca_tooltip' title='".tr("Click for more information")."' data-repository='".htmlentities($template['RepoName'],ENT_QUOTES)."'></a>";
 

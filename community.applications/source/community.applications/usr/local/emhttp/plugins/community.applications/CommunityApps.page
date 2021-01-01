@@ -309,12 +309,12 @@ $(function(){
 		if ( ! $(this).hasClass("caRepositoryMenu") ) {
 			$(".caMenuItem").removeClass("selectedMenu");
 			if ( ! $(this).parent().hasClass("subCategory") ) {
-				$(".subCategory").hide();
+				$(".subCategory").hide("slow");
 			}
 		}
 	
 		$(this).addClass("selectedMenu");
-		$(this).next().show();
+		$(this).next().show("slow");
 	});
 
 	$(".sectionMenu").on("click",function() {
@@ -522,6 +522,7 @@ function stripTags(string) {
 function setToolTip() {
 	$('.ca_tooltip').tooltipster({
 		contentAsHTML:true,
+		contentCloning:true,
 		delay:[1000,1],
 		timer:15000,
 		animation:'none',
@@ -664,7 +665,7 @@ function myCloseSpinner() {
 
 function myCloseAlert() {
 	swal.close();
-	swalBackground("transparent");
+	swalBackground("<?=$swalBackground?>");
 	enableSearch();
 }
 
@@ -1362,13 +1363,16 @@ function installMulti() {
 }
 
 function updateDisplay(data) {
-	$("#templates_content").html(data);
-	setToolTip();
-	enableSearch();
-	$('img').on("error",function() {
-		$(this).attr('src',"/plugins/dynamix.docker.manager/images/question.png");
+	$("#templates_content").fadeOut(function() {
+		$("#templates_content").html(data).fadeIn(function(){
+			setToolTip();
+			enableSearch();
+			$('img').on("error",function() {
+				$(this).attr('src',"/plugins/dynamix.docker.manager/images/question.png");
+			});
+			myCloseAlert();
+		});
 	});
-	myCloseAlert();
 }
 
 function saveState() {

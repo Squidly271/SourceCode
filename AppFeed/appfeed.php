@@ -1110,6 +1110,8 @@ foreach ($repositories as $repo) {
 					download_url($o['LanguageURL'],$appPaths['languageZip']);
 					exec($cmd);
 					$countryCode = $o['LanguagePack'];
+				} else {
+					$countryCode = "en_US";
 				}
 
 // Save copy of what CA requires to translate language popups properly.  This gets downloaded when the popup is opened

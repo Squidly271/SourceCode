@@ -68,22 +68,9 @@ switch ($theme) {
 		break;
 }
 ?>
-div.tooltipster-content a{color:<?=$unRaid66color?>;}
 body.stop-scrolling{height:100%;overflow:auto}  /* disable SweetAlert killing the scroll bar ( stops the wiggle ) */
 .sweet-overlay{background-color:rgba(0, 0, 0, 0) !important;} /* don't dim if spinner is displayed */
-.popupTableAreaPlugin{font-size:0.9rem;width:450px;}
-.popupTableAreaDocker{font-size:0.9rem;width:450px;}
-.popupTableAreaLanguage{font-size:0.9rem;width:450px;}
-.popupTableAreaLanguage::before{position:absolute;margin-left:20rem;font-family:'Unraid';content:'\e987';font-size:10rem;color:rgba(43,43,43,0.10);z-index:-1;}
-
-<?if ( ! $unRaid69 ):?>
-.popupTableAreaPlugin::before{position:absolute;margin-left:20rem;font-family:'fontAwesome';content:'\f12e';font-size:10rem;color:rgba(43,43,43,0.10);z-index:-1;}
-<?else:?>
-.popupTableAreaPlugin::before{position:absolute;margin-left:20rem;font-family:'Unraid';content:'\e986';font-size:10rem;color:rgba(43,43,43,0.10);z-index:-1;}
-<?endif;?>
-<?if ( $unRaid67 ):?>
-.popupTableAreaDocker::before{position:absolute;margin-left:20rem;font-family:'Unraid';content:'\e90b';font-size:10rem;color:rgba(43,43,43,0.10);z-index:-1;}
-<?endif;?>
+.popupTable{font-size:1.5rem;width:450px;margin-top:0px;margin-left:auto;}
 .ca_LanguageDisclaimer {cursor:pointer;font-size:.9rem;}
 .ca_LanguageDisclaimer:hover {color:<?=$linkColor?>;}
 a.ca_LanguageDisclaimer {text-decoration:none;}
@@ -119,7 +106,7 @@ a.ca_categoryLink {text-decoration:none;color:inherit;}
 .ca_holderLanguage::before{position:relative;float:right;margin-top:.5rem;margin-right:3rem;font-family:'Unraid';content:'\e987';font-size:9rem;color:<?=$watermarkColor?>;}
 .ca_holderRepository::before{position:relative;float:right;margin-top:1.5rem;margin-right:3rem;margin-bottom:2rem;font-family:'fontAwesome';content:'\f2be';font-size:7rem;color:<?=$watermarkColor?>;}
 .ca_topRightArea {display:block;position:relative;margin-top:.5rem;margin-right:2rem;z-index:9999;float:right;}
-img.displayIcon {height:6.4rem;width:6.4rem;}
+img.displayIcon {height:6.4rem;width:6.4rem;border-radius:1rem 1rem 1rem 1rem;}
 i.displayIcon {font-size:5.5rem;color:#626868;padding-top:0.25rem;}
 .ca_bottomLine {display:block;position:relative;padding-top:9.5rem;margin-left:1.5rem;}
 .ca_bottomRight {float:right;margin-right:2rem;padding-top:0.5rem;}
@@ -162,17 +149,18 @@ input[type=checkbox] {width:2rem;height:2rem;margin-right:1rem;margin-top:-.5rem
 .pinned::after {content:"\f08d";font-family:fontAwesome;}
 .unpinned::after {content:"\f08d";font-family:fontAwesome;display:inline-block;-webkit-transform: rotate(20deg);-moz-transform: rotate(20deg);-ms-transform: rotate(20deg); -o-transform: rotate(20deg);  transform: rotate(20deg);}
 .ca_favouriteRepo {font-size:2rem;cursor:pointer;padding-left:.5rem;padding-right:.5rem;cursor:pointer;color:#1fa67a !important;padding:.3rem;}
-.ca_favouriteRepo::after {content:"\f2be";font-family:fontAwesome;}
+.ca_favouriteRepo::before {content:"\f2be";font-family:fontAwesome;}
 .ca_non_favouriteRepo {font-size:2rem;cursor:pointer;padding-left:.5rem;padding-right:.5rem;cursor:pointer;padding:.3rem;}
-.ca_non_favouriteRepo::after {content:"\f2be";font-family:fontAwesome;}
+.ca_non_favouriteRepo::before {content:"\f2be";font-family:fontAwesome;}
 .ca_repoSearch {font-size:2rem;cursor:pointer;padding-left:.5rem;padding-right:.5rem;cursor:pointer;padding:.3rem;}
+.ca_repoSearchPopup {font-size:2rem;cursor:pointer;padding-left:.5rem;padding-right:.5rem;cursor:pointer;padding:.3rem;}
 .ca_repoSearch::after {content:"\f002";font-family:fontAwesome;}
 .appIcons {font-size:2.3rem;color:inherit;cursor:pointer;padding-left:.5rem;padding-right:.5rem;}
 .appIcons:hover {text-decoration:none;color:<?=$unRaid66color?> ! important;}
 .pinned:hover {text-decoration:none;color:<?=$unRaid66color?>;}
 .unpinned:hover {text-decoration:none;color:<?=$unRaid66color?>;}
 a.appIcons {text-decoration:none;}
-.appIconsPopUp {font-size:1.1rem !important;cursor:pointer;padding-left:.5rem;padding-right:.5rem;}
+.appIconsPopUp {font-size:2rem !important;cursor:pointer;padding-left:.5rem;padding-right:.5rem;color:default;}
 .appIconsPopUp:hover {text-decoration:none;color:<?=$unRaid66color?>;}
 .myReadmore {text-align:center;}
 .myReadmoreButton {color:blue;}
@@ -214,7 +202,7 @@ a.ca_fa-delete{text-decoration:none;margin-left:1rem;}
 .ca_repository::before {content:"\f2be";font-family:fontAwesome;}
 <?if (version_compare($unRaidSettings['version'],"6.9.0-beta37",">")):?>
 .ca_discord::before{content:"\e988";font-family:Unraid;font-size:2.8rem;vertical-align:bottom;}
-.ca_discord_popup::before{content:"\e988";font-family:Unraid;font-size:1.5rem;vertical-align:bottom;}
+.ca_discord_popup::before{content:"\e988";font-family:Unraid;font-size:2.2rem;vertical-align:middle;}
 <?else:?>
 .ca_discord {height:2.9rem; margin-top:-8px;cursor:pointer;}
 <?endif;?>
@@ -253,8 +241,8 @@ a.ca_fa-delete{text-decoration:none;margin-left:1rem;}
 .donate {background: <?=$donateBackground?>;background: -webkit-linear-gradient(top, transparent 0%, rgba(0,0,0,0.4) 100%),-webkit-linear-gradient(left, lighten(<?=$donateBackground?>, 15%) 0%, <?=$donateBackground?> 50%, lighten(<?=$donateBackground?>, 15%) 100%);  background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.4) 100%),linear-gradient(to right, lighten(#E68321, 15%) 0%, #E68321 50%, lighten(#E68321, 15%) 100%);  background-position: 0 0;  background-size: 200% 100%;  border-radius: 15px;  color: #fff;  padding: 1px 10px 1px 10px;  text-shadow: 1px 1px 5px #666;}
 a.donate {text-decoration:none;font-style:italic;color:<?=$donateText?>;}
 .popup-donate {background:black;background: -webkit-linear-gradient(top, transparent 0%, rgba(0,0,0,0.4) 100%),-webkit-linear-gradient(left, lighten(<?=$donateBackground?>, 15%) 0%, <?=$donateBackground?> 50%, lighten(<?=$donateBackground?>, 15%) 100%);  background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.4) 100%),              linear-gradient(to right, lighten(#E68321, 15%) 0%, #E68321 50%, lighten(#E68321, 15%) 100%);  background-position: 0 0;  background-size: 200% 100%;  border-radius: 15px;  color: #fff;  padding: 1px 10px 1px 10px;  text-shadow: 1px 1px 5px #666;}
-a.popup-donate {text-decoration:none;font-style:italic;color:white;}
-a.popup-donate:hover {background-color:<?=$unRaid66color?>;}
+a.popup-donate {text-decoration:none;font-style:italic;color:white;font-size:1.5rem;}
+a.popup-donate:hover {color:<?=$donateText?>;background-color:<?=$unRaid66color?>}
 <?if ( $theme == "azure" ):?>
 .searchSubmit{font-family:'FontAwesome';width:2.9rem;height:2.9rem;border:.1rem solid #dadada;border-radius:4px 4px 4px 4px;font-size:1.1rem;position:relative; top:-.7rem;padding:0px .2rem;background:transparent;border:none;cursor:pointer;}
 #searchBox{margin-left:1rem;margin-right:0;position:relative;top:-.6rem;border:none;}
@@ -279,8 +267,8 @@ a.popup-donate:hover {background-color:<?=$unRaid66color?>;}
 a.popUpLink {text-decoration:none;}
 a.popUpLink:hover {color:<?=$unRaid66color?>;}
 .popUpDeprecated {color:#FF8C2F;}
-i.popupIcon {color:#626868;font-size:3.5rem;padding-left:1rem;width:4.8rem}
-img.popupIcon {width:4.8rem;height:4.8rem;padding:0.3rem;border-radius:1rem 1rem 1rem 1rem;}
+i.popupIcon {color:#626868;font-size:14.4rem;padding-left:1rem;width:14.4rem}
+img.popupIcon {width:14.4rem;height:14.4rem;padding:0.3rem;border-radius:1rem 1rem 1rem 1rem;}
 .display_beta {color:#FF8C2F;}
 a.appIconsPopUp { text-decoration:none;color:inherit;}
 .ca_italic {font-style:italic;}
@@ -296,11 +284,15 @@ a.appIconsPopUp { text-decoration:none;color:inherit;}
 .ca_toolsView {font-size:2.3rem; position:relative;top:-0.2rem;}
 #templates_content {overflow-x:hidden;}
 .graphLink {cursor:pointer;text-decoration:none;}
-.caChart {display:none;border:1px solid #c2c8c8;border-radius:4px 4px 4px 4px;}
+.caChart {display:none;border:none;}
 .caHighlight {color:#FF0000;font-weight:bold;}
 .caChangeLog {cursor:pointer;}
 .caInstallLinePopUp {display:flex;flex-wrap:wrap;justify-content:space-around;}
 .caHelpIconSpacing {display:inline-block;width:7rem;height:3rem;}
+
+.popupDescriptionArea{display:block;font-size:1.5rem;;}
+.popupTitle{margin:auto;text-align:center;font-weight:bold;font-size:2rem;}
+
 .awesomplete [hidden] {display: none;}
 .awesomplete .visually-hidden {position: absolute;clip: rect(0, 0, 0, 0);}
 .awesomplete {display: inline-block;position: relative;color: red;}
@@ -319,3 +311,4 @@ a.appIconsPopUp { text-decoration:none;color:inherit;}
 .awesomplete mark {background: hsl(65, 100%, 50%);}
 .awesomplete li:hover mark {background: hsl(68, 100%, 41%);}
 .awesomplete li[aria-selected="true"] mark {background: hsl(86, 100%, 21%);color: inherit;}
+.tooltipster-box {max-height:350px;}

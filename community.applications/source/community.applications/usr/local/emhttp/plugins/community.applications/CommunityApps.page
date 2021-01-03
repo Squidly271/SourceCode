@@ -119,6 +119,7 @@ var restoreStateMenu = false;
 var initialStartup = true;
 var repoBanner = false;
 var repoBannerTimer = false;
+var unRaidFontSize = $("html").css("font-size").replace("px","");
 
 $(function(){
 	// This file is guaranteed to exist on the flash drive
@@ -188,28 +189,28 @@ $(function(){
 		triggerClose:{click:true,scroll:true,mouseleave:true}
 	});
 
-	$("#searchBox").keydown(function(e) {
+	$("#searchBox").keydown(function(e) { // Allow ESC key to exit from tooltipster popups
 		if (e.which === 13) {
 			searchBoxAwesomplete.close();
 			doSearch();
 		}
 	});
+	$('body').keydown(function(e) {
+		if (e.which === 27) {
+			$(".tooltipstered").tooltipster('hide');
+		}
+	});
 
 	$('.caChangeLog').on("click",function() {disableSort();scrollToTop();caChangeLog();});
 	$('.mainArea').on("click",'.ca_multiselect',function() {enableMultiInstall();});
-	$('.mainArea').on("click",".ca_appPopup",function() {
+/* 	$('.mainArea').on("click",".ca_appPopup",function() {
 		var appnumber = $(this).data("appnumber");
 		var apppath = $(this).data("apppath");
 		var appname = $(this).data("appname");
 		var beta = " "+$(this).data("beta");
 		appname = stripTags(appname);
 		showDesc_openBox("/plugins/community.applications/scripts/showDesc.php?appNumber="+appnumber+"&appPath="+apppath+"&appName="+appname+"'",appname+beta,450,650,true,"checkForPluginInstallRequested()");
-	});
-
-	$(".mainArea").on("click",".ca_repoPopup,.ca_repoinfo,.ca_reporeadmore",function() {
-		var repository = $(this).data("repository");
-		showDesc_openBox("/plugins/community.applications/scripts/showRepo.php?repository="+repository,repository,450,650,true,"afterRepoPopUp();");
-	});
+	}); */
 
 	$('.mainArea').on("click",".unpinned,.pinned",function() {
 		var repository = $(this).data("repository");
@@ -236,31 +237,20 @@ $(function(){
 	});
 
 	$('.mainArea').on("click",".ca_non_favouriteRepo",function() {
-		$(".ca_fav").removeClass("ca_favouriteRepo").addClass("ca_non_favouriteRepo");
-		var repo = $(this).data("repository");
-		var apps = $.find('.ca_non_favouriteRepo[data-repository="'+repo+'"]');
-		$(apps).removeClass("ca_non_favouriteRepo").addClass("ca_favouriteRepo");
-		setToolTipForFavourite();
-		clearTimeout(repoBannerTimer);
-		post({action:'toggleFavourite',repository:repo},function(data) {
-			if ( repoBanner !== false ) {
-				removeBannerWarning(repoBanner);
-			}
-			var bannerMessage = repo.replace("'s Repository","").replace("' Repository","").replace(" Repository","");
-			repoBanner = addBannerWarning(sprintf("%s set as favourite repository",bannerMessage),false,true);
-			repoBannerTimer = setTimeout(function(){
-				removeBannerWarning(repoBanner);
-				repoBanner = false;
-			},5000);
-			setFavRepoSearch();
-		});
-		setFavRepoSearch();
+		setFavourite(this);
 	});
-
-	$('.mainArea').on("click",".ca_repoSearch",function() {
+	
+	$('body').on("click",".favPopup",function() {
+		setFavourite(this);
+		$(this).removeClass(".favPopup");
+		$(this).html(" Favourite Repository");
+	});
+	
+	$('body').on("click",".ca_repoSearch,.ca_repoSearchPopUp",function() {
 		var repo = $(this).data("repository");
 		doSearch(false,repo);
 	});
+
 
 	$('.favouriteRepo').on("click",function() {
 		if ( $(this).hasClass("caMenuDisabled") )
@@ -402,6 +392,7 @@ $(function(){
 <?if ( ! $unRaid66 ):?>
 	$("html").css("font-size","10px");
 <?endif;?>
+
 	/* Everything is now initialized.  This is the start of the actual "real" code */
 	if ( "<?=$firstRun?>" == "true" ) {
 	  $(".ca_templatesDisplay").hide();
@@ -456,6 +447,13 @@ $(function(){
 	}
 });
 
+// Shows the repository from the app's popup
+function showRepo(el) {
+	var id = $(el).data("appid");
+	var repo_el = $.find(".tooltipstered[data-appid='"+id+"']");
+	$(".tooltipstered").tooltipster("hide");
+	$(repo_el).tooltipster("open");
+}
 function disableSort() {
 	hideSortIcons();
 	enableIcon("#sortIcon",false);
@@ -520,17 +518,7 @@ function stripTags(string) {
 }
 
 function setToolTip() {
-	$('.ca_tooltip').tooltipster({
-		contentAsHTML:true,
-		contentCloning:true,
-		delay:[1000,1],
-		timer:15000,
-		animation:'none',
-		arrow:true,
-		trigger:'custom',
-		triggerOpen:{mouseenter: true},
-		triggerClose:{click:true,scroll:true,mouseleave:true}
-	});
+	$('.tooltipstered').tooltipster('destroy');
 	$('.ca_tooltip-warning').tooltipster({
 		contentAsHTML:true,
 		interactive:true,
@@ -538,9 +526,60 @@ function setToolTip() {
 		triggerOpen:{click: true, mouseenter: true},
 		triggerClose:{click:true,scroll:true,mouseleave:true}
 	});
+
+	$(".ca_repoPopup,.ca_repoinfo,.ca_reporeadmore").tooltipster({
+		contentAsHTML:true,
+		interactive:true,
+		trigger:'custom',
+		triggerOpen:{click:true,touchstart:true},
+		multiple:true,
+		minWidth:unRaidFontSize*60,
+		maxWidth:unRaidFontSize*60,
+		triggerClose:{click:true},
+		onlyOne:true,
+		functionBefore: function(instance,helper) {
+			$(".ca_repoPopup").tooltipster("hide");
+			var origin = $(helper.origin);
+			var repository = origin.attr("data-repository");
+			post({action:'getRepoDescription',repository:repository},function(data) {
+				origin.tooltipster("content",data.description);
+			});
+		}
+	});
+	
+	$(".ca_appPopup").tooltipster({
+		contentAsHTML:true,
+		interactive:true,
+		trigger:'custom',
+		triggerOpen:{click:true,touchstart:true},
+		multiple:true,
+		minWidth:unRaidFontSize*60,
+		maxWidth:unRaidFontSize*60,
+		triggerClose:{click:true},
+		onlyOne:true,
+		functionInit: function(instance,helper) {
+			var origin = $(helper.origin);
+			origin.tooltipster("content","Loading");
+		},
+		functionBefore: function(instance,helper) {
+			var origin = $(helper.origin);
+			var appnumber = $(origin).data("appnumber");
+			var apppath = $(origin).data("apppath");
+			var appname = $(origin).data("appname");
+			var beta = " "+$(origin).data("beta");
+			appname = stripTags(appname);
+			post({action:'getPopupDescription',appName:appname,appPath:apppath},function(result) {
+				origin.tooltipster("content",result.description);
+				popUpChart(result,appnumber);
+				
+			});
+			
+		}
+	});
+			
 }
 
-// Wait for the showDesc modal to close before opening another to install plugin
+/* // Wait for the showDesc modal to close before opening another to install plugin
 function checkForPluginInstallRequested() {
 	var pluginURL = $.cookie("ca_installPluginURL");
 	var language = $.cookie("ca_languageSwitch");
@@ -555,18 +594,18 @@ function checkForPluginInstallRequested() {
 	if ( language ) {
 		CAswitchLanguage(language);
 	}
-}
+} */
 
-function modalShowRepo() {
+/* function modalShowRepo() {
 	if ( ! $("#sb-container").is(":visible") ) {
 		clearInterval(showRepoIntervalTimer);
 		var profile = $.cookie("ca_profile");
 		$.removeCookie("ca_profile");
 		showDesc_openBox("/plugins/community.applications/scripts/showRepo.php?repository="+profile,profile,450,650,true,"afterRepoPopUp();");
 	}
-}
+} */
 	
-function modalPluginInstall() {
+/* function modalPluginInstall() {
 	if ( ! $("#sb-container").is(":visible") ) {
 		clearInterval(pluginInstallIntervalTimer);
 		var pluginURL = $.cookie("ca_installPluginURL");
@@ -582,7 +621,7 @@ function modalPluginInstall() {
 			}
 		}
 	}
-}
+} */
 
 function showSpecialCategory(button) {
 	$(".caMenuItem").removeClass("selectedMenu");
@@ -756,11 +795,13 @@ function changeSortOrder(button,buttonClass,previousApps) {
 	var sortOrder = getSortOrder();
 	var startup = false;
 	if ( button || buttonClass || previousApps) {
-		data.searchActive = false;
+		data.searchFlag = false;
 	}
-	if ( data.searchActive ) {
+	console.log("data");
+	console.log(data);
+/* 	if ( ! data.searchFlag ) {
 		sortOrder = [["sortBy","noSort"]];
-	}
+	} */
 	$(".startupButton").each(function(){
 		if ($(this).hasClass("selectedMenu")) {
 			startup = "true";
@@ -917,6 +958,7 @@ function clearSearchBox() {
 }
 
 function installPlugin(pluginURL) {
+	$(".tooltipstered").tooltipster("hide");
 	disableSearch();
 	<? if ( $translations ): ?>
 		openBox('/plugins/community.applications/scripts/pluginInstall.sh&arg1=install&arg2='+pluginURL,"<?tr('Install Plugin')?>",600,900,true,"refreshDisplay()");
@@ -1141,6 +1183,7 @@ function pinnedApps() {
 }
 
 function displayTags(leadTemplate) {
+	$(".tooltipstered").tooltipster("hide");
 	post({action:'displayTags',leadTemplate:leadTemplate,noSpinner:true},function(result) {
 		disableSearch();
 		swal({
@@ -1373,6 +1416,7 @@ function updateDisplay(data) {
 			myCloseAlert();
 		});
 	});
+	saveState();
 }
 
 function saveState() {
@@ -1713,31 +1757,207 @@ function removeLanguage(language) {
 function setToolTipForFavourite() {
 	$(".ca_fav").each(function(){
 		if ( $(this).hasClass("ca_favouriteRepo") ) {
-			$(this).tooltipster("content","<?tr("Click to remove favourite repository");?>");
+			$(this).attr("title","<?tr("Click to remove favourite repository");?>");
 		} else {
 			var repository = $(this).data("repository");
 			repository = repository.replace("'s Repository","").replace("' Repository","").replace(" Repository","");
-			$(this).tooltipster("content",sprintf("Click to set %s as favourite repository",repository));
+			$(this).attr("title",sprintf("Click to set %s as favourite repository",repository));
 		}
 	});
 }
 
-function afterRepoPopUp() {
-	if ($.cookie("ca_setFavRepo") ) {
-		$(".ca_fav").removeClass("ca_favouriteRepo").addClass("ca_non_favouriteRepo");
-		var apps = $.find('.ca_non_favouriteRepo[data-repository="'+$.cookie("ca_setFavRepo")+'"]');
-		$(".favouriteRepo").attr("data-repository",$.cookie("ca_setFavRepo"));
-		$(apps).addClass("ca_favouriteRepo");
-		$(".favouriteRepo").addClass("caMenuEnabled").removeClass("caMenuDisabled");
-		setToolTipForFavourite();
-		$.cookie("ca_setFavRepo","",{path:"/"});
+function setFavourite(button) {
+	$(".ca_fav").removeClass("ca_favouriteRepo").addClass("ca_non_favouriteRepo");
+	var repo = $(button).data("repository");
+	var apps = $.find('.ca_non_favouriteRepo[data-repository="'+repo+'"]');
+	$(apps).removeClass("ca_non_favouriteRepo").addClass("ca_favouriteRepo");
+	setToolTipForFavourite();
+	clearTimeout(repoBannerTimer);
+	post({action:'toggleFavourite',repository:repo},function(data) {
+		if ( repoBanner !== false ) {
+			removeBannerWarning(repoBanner);
+		}
+		var bannerMessage = repo.replace("'s Repository","").replace("' Repository","").replace(" Repository","");
+		repoBanner = addBannerWarning(sprintf("%s set as favourite repository",bannerMessage),false,true);
+		repoBannerTimer = setTimeout(function(){
+			removeBannerWarning(repoBanner);
+			repoBanner = false;
+		},5000);
+		setFavRepoSearch();
+	});
+	setFavRepoSearch();
+}
+
+function popUpChart(descData,appnumber) {
+	if ( $("#trendChart"+appnumber).length ) {
+		var fontSize = 14;
+
+		if (descData.trendLabel.length > 3) {
+			var fontSize = 12;
+		}
+		if (descData.trendLabel.length > 6) {
+			var fontSize = 11;
+		}
+		if (descData.trendLabel.length > 8) {
+			var fontSize = 8;
+		}
+
+		var ctx = document.getElementById("trendChart"+appnumber).getContext('2d');
+		let chart = new Chart(ctx, {
+			type: 'line',
+			data: {
+				datasets: [{
+					data: descData.trendData,
+					borderColor: '#FF8C2F',
+					trendlineLinear: {
+						style: "rgb(255 ,66 ,255)",
+						lineStyle: "dotted",
+						width: 2
+					}
+				}],
+				labels: descData.trendLabel
+			},
+			options: {
+				tooltips: {
+					callbacks: {
+						label: function(tooltipItem,data) {
+							return tooltipItem.yLabel.toLocaleString()+"%";
+						}
+					}
+				},
+				title: {
+					display: true,
+					text: "<?tr("Trend Per Month");?>",
+					fontSize: 16,
+					fontColor: '#f2f2f2'
+				},
+				legend: {
+					display: false
+				},
+				events: ["mousemove","mouseout"],
+				scales: {
+					yAxes: [{
+						ticks: {
+							callback: function(label,index,labels) {
+								return label + " %";
+							},
+							precision: 0,
+							fontColor: '#f2f2f2'
+						}
+					}],
+					xAxes: [{
+						ticks: {
+							fontSize: fontSize,
+							fontColor: '#f2f2f2'
+						}
+					}]
+				}
+			}
+		});
 	}
-	if ($.cookie("ca_searchRepo") ) {
-		var repo = $.cookie("ca_searchRepo");
-		$.cookie("ca_searchRepo","",{path:"/"});
-		doSearch(false,repo);
+	if ( $("#downloadChart"+appnumber).length ) {
+		var ctx = document.getElementById("downloadChart"+appnumber).getContext('2d');
+		let chart = new Chart(ctx, {
+			type: 'line',
+			data: {
+				datasets: [{
+					data: descData.downloadtrend,
+					borderColor: '#FF8C2F',
+					trendlineLinear: {
+						style: "rgb(255 ,66 ,255)",
+						lineStyle: "dotted",
+						width: 2
+					}
+				}],
+				labels: descData.downloadLabel
+			},
+			options: {
+				tooltips: {
+					callbacks: {
+						label: function(tooltipItem,data) {
+							return tooltipItem.yLabel.toLocaleString();
+						}
+					}
+				},
+				title: {
+					display: true,
+					text: "<?tr("Downloads Per Month")?>",
+					fontSize: 16,
+					fontColor: '#f2f2f2'
+				},
+				legend: {
+					display: false
+				},
+				events: ["mousemove","mouseout"],
+				scales: {
+					yAxes: [{
+						ticks: {
+							callback: function(label,index,labels) {
+								return label.toLocaleString();
+							},
+							fontColor: '#f2f2f2'
+						}
+					}],
+					xAxes: [{
+						ticks: {
+							fontSize: fontSize,
+							fontColor: '#f2f2f2'
+						}
+					}]
+				}
+			}
+		});
+	}
+	if ( $("#totalDownloadChart"+appnumber).length ) {
+		var ctx = document.getElementById("totalDownloadChart"+appnumber).getContext('2d');
+		let chart = new Chart(ctx, {
+			type: 'line',
+			data: {
+				datasets: [{
+					data: descData.totaldown,
+					borderColor: '#FF8C2F'
+				}],
+				labels: descData.totaldownLabel
+			},
+			options: {
+				tooltips: {
+					callbacks: {
+						label: function(tooltipItem,data) {
+							return tooltipItem.yLabel.toLocaleString();
+						}
+					}
+				},
+				title: {
+					display: true,
+					text: "<?tr("Total Downloads");?>",
+					fontSize: 16,
+					fontColor: '#f2f2f2'
+				},
+				legend: {
+					display: false
+				},
+				events: ["mousemove","mouseout"],
+				scales: {
+					yAxes: [{
+						ticks: {
+							callback: function(label,index,labels) {
+								return label.toLocaleString();
+							},
+							fontColor: '#f2f2f2'
+						}
+					}],
+					xAxes: [{
+						ticks: {
+							fontSize: fontSize,
+							fontColor: '#f2f2f2'
+						}
+					}]
+				}
+			}
+		});
 	}
 }
+
 </script>
 
 > <span class='caHelpIconSpacing'><i class='fa fa-sort-alpha-asc enabledIcon' aria-hidden='true' style='font-size:2rem;'></i></span><?tr("This chooses how to sort the results");?><br>

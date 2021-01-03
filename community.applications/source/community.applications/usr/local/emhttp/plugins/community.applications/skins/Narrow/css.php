@@ -69,8 +69,10 @@ switch ($theme) {
 }
 ?>
 body.stop-scrolling{height:100%;overflow:auto}  /* disable SweetAlert killing the scroll bar ( stops the wiggle ) */
+.popupHolder{max-height:350px;}
 .sweet-overlay{background-color:rgba(0, 0, 0, 0) !important;} /* don't dim if spinner is displayed */
-.popupTable{font-size:1.5rem;width:450px;margin-top:0px;margin-left:auto;}
+.popupTable{font-size:1.5rem;width:45rem;margin-top:0px;margin-left:auto;}
+.popupTable td {width:30%;text-align:left;}
 .ca_LanguageDisclaimer {cursor:pointer;font-size:.9rem;}
 .ca_LanguageDisclaimer:hover {color:<?=$linkColor?>;}
 a.ca_LanguageDisclaimer {text-decoration:none;}

@@ -102,8 +102,6 @@ function my_display_apps($file,$pageNumber=1,$selectedApps=false,$startup=false)
 			$template['bio'] = strip_tags(markdown($template['bio']));
 			$template['display_dockerName'] = $template['RepoName'];
 
-			if ( ! $template['DonateText'] )
-				$template['DonateText'] = tr("Donate To Author");
 			$template['display_DonateImage'] = $template['DonateLink'] ? "<a class='ca_tooltip donateLink donate' href='{$template['DonateLink']}' target='_blank' title='{$template['DonateText']}'>".tr("Donate")."</a>" : "";
 
 			if ( $template['Forum'] )
@@ -155,9 +153,6 @@ function my_display_apps($file,$pageNumber=1,$selectedApps=false,$startup=false)
 			$template['Category'] = categoryList($template['Category']);
 
 			$template['display_Private'] = ( $template['Private'] == "true" ) ? "<span class='ca_tooltip ca_private' title='".tr("Private Application")."'></span>" : "";
-
-			if ( ! $template['DonateText'] )
-				$template['DonateText'] = tr("Donate To Author");
 
 			if ( $selected )
 				$template['display_DonateImage'] = $template['DonateLink'] ? "<a class='ca_tooltip donateLink donate' href='{$template['DonateLink']}' target='_blank' title='{$template['DonateText']}'>".tr("Donate")."</a>" : "";
@@ -339,7 +334,7 @@ function my_display_apps($file,$pageNumber=1,$selectedApps=false,$startup=false)
 				if ( $countryCode !== "en_US" ) {
 					$template['ca_LanguageDisclaimer'] = "<a class='ca_LanguageDisclaimer ca_fa-warning warning-yellow' href='{$template['disclaimLineLink']}' target='_blank'>&nbsp;{$template['disclaimLanguage']}</a>";
 				}
-				$template['display_author'] = languageAuthorList($template['Author']);
+				//$template['display_author'] = languageAuthorList($template['Author']);
 			}
 
 	# Entries created.  Now display it
@@ -539,8 +534,6 @@ function getPopupDescription($appNumber) {
 	$donatelink = $template['DonateLink'];
 	if ( $donatelink ) {
 		$donatetext = $template['DonateText'];
-		if ( ! $donatetext )
-			$donatetext = $template['Plugin'] ? tr("Donate To Author") : tr("Donate To Maintainer");
 	}
 
 	if ( ! $template['Plugin'] ) {
@@ -592,10 +585,8 @@ function getPopupDescription($appNumber) {
 	} else
 		$templateDescription .= "<img class='popupIcon' src='{$template['Icon']}'>";
 
-
 	$templateDescription .= "</div>";
 
-	
 	$templateDescription .= "<div class='popupDescriptionArea ca_center'>";
 	$templateDescription .= $template['Language'] ? $template['Description'] : strip_tags($template['Description']);
 	$templateDescription .= "</div>";
@@ -685,9 +676,6 @@ function getPopupDescription($appNumber) {
 	$templateDescription .= "<br>";
 	$templateDescription .= "<div class='ca_hr'></div>";
 
-/*  	$tableClass = $template['Plugin'] ? "<table class='popupTableAreaPlugin'>" : "<table class='popupTableAreaDocker'>";
-	$tableClass = $template['Language'] ? "<table class='popupTableAreaLanguage']>" : $tableClass;
-	$templateDescription .= $tableClass; */
 	$templateDescription .= "<table class='popupTable'>";
 
 	$author = $template['PluginURL'] ? $template['PluginAuthor'] : $template['SortAuthor'];
@@ -812,12 +800,12 @@ function getPopupDescription($appNumber) {
 	if ( ! $countryCode ) {
 		$changeLogMessage = "Note: not all ";
 		$changeLogMessage .= $template['PluginURL'] || $template['Language'] ? "authors" : "maintainers";
-		$changeLogMessage .= " keep up to date on change logs</font></div><br>";
+		$changeLogMessage .= " keep up to date on change logs<br>";
 		$changeLogMessage = "<div class='ca_center'><font size='0'>".tr($changeLogMessage)."</font></div><br>";
 	}
 	if ( trim($template['Changes']) ) {
-		if ( $appNumber != "ca" && $appNumber != "ca_update" )
-			$templateDescription .= "</div>";
+/* 		if ( $appNumber != "ca" && $appNumber != "ca_update" )
+			$templateDescription .= "</div>"; */
 
 		if ( $template['Plugin'] ) {
 			if ( file_exists("/var/log/plugins/$pluginName") ) {
@@ -870,7 +858,7 @@ function getPopupDescription($appNumber) {
 		}
 		$down = is_array($down) ? $down : array();
 	}
-
+	$templateDescription = "<div class='popupHolder'>$templateDescription</div>";
 	@unlink($caPaths['pluginTempDownload']);
 	return array("description"=>$templateDescription,"trendData"=>$template['trends'],"trendLabel"=>$chartLabel,"downloadtrend"=>$down,"downloadLabel"=>$downloadLabel,"totaldown"=>$totalDown,"totaldownLabel"=>$downloadLabel);
 }
@@ -893,7 +881,6 @@ function getRepoDescription($repository) {
 	$t .= "<div class='popupDescriptionArea ca_center'><br>".strip_tags($repo['bio'])."</div>";
 
 	if ( $repo['DonateLink'] ) {
-		$donateText = $repo['DonateText'] ?: tr("Donate To Author");
 		$t .= "<div style='float:right;text-align:right;'><font size=0.75rem;>$donateText</font>&nbsp;&nbsp;<a class='popup-donate donateLink' href='{$repo['DonateLink']}' target='_blank'>".tr("Donate")."</a></div><br><br>";
 	} else {
 		$t .= "<br><br>";
@@ -972,7 +959,7 @@ function getRepoDescription($repository) {
 
 
 
-	$t = "<div style='max-height:350px;'>$t</div>";
+	$t = "<div class='popupHolder'>$t</div>";
 	return array("description"=>$t);
 }
 

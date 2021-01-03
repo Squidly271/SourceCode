@@ -203,14 +203,6 @@ $(function(){
 
 	$('.caChangeLog').on("click",function() {disableSort();scrollToTop();caChangeLog();});
 	$('.mainArea').on("click",'.ca_multiselect',function() {enableMultiInstall();});
-/* 	$('.mainArea').on("click",".ca_appPopup",function() {
-		var appnumber = $(this).data("appnumber");
-		var apppath = $(this).data("apppath");
-		var appname = $(this).data("appname");
-		var beta = " "+$(this).data("beta");
-		appname = stripTags(appname);
-		showDesc_openBox("/plugins/community.applications/scripts/showDesc.php?appNumber="+appnumber+"&appPath="+apppath+"&appName="+appname+"'",appname+beta,450,650,true,"checkForPluginInstallRequested()");
-	}); */
 
 	$('.mainArea').on("click",".unpinned,.pinned",function() {
 		var repository = $(this).data("repository");
@@ -518,7 +510,7 @@ function stripTags(string) {
 }
 
 function setToolTip() {
-	$('.tooltipstered').tooltipster('destroy');
+//	$('.tooltipstered').tooltipster('destroy');
 	$('.ca_tooltip-warning').tooltipster({
 		contentAsHTML:true,
 		interactive:true,
@@ -555,11 +547,11 @@ function setToolTip() {
 		multiple:true,
 		minWidth:unRaidFontSize*60,
 		maxWidth:unRaidFontSize*60,
-		triggerClose:{click:true},
+		triggerClose:{click:true,tap:true},
 		onlyOne:true,
 		functionInit: function(instance,helper) {
 			var origin = $(helper.origin);
-			origin.tooltipster("content","Loading");
+			origin.tooltipster("content","<div class='popupHolder' style='height:450px;'>Loading</div>");
 		},
 		functionBefore: function(instance,helper) {
 			var origin = $(helper.origin);
@@ -567,61 +559,20 @@ function setToolTip() {
 			var apppath = $(origin).data("apppath");
 			var appname = $(origin).data("appname");
 			var beta = " "+$(origin).data("beta");
+
 			appname = stripTags(appname);
 			post({action:'getPopupDescription',appName:appname,appPath:apppath},function(result) {
 				origin.tooltipster("content",result.description);
 				popUpChart(result,appnumber);
 				
 			});
-			
+		},
+		functionAfter: function(origin) {
+			origin.tooltipster("hide");
 		}
 	});
 			
 }
-
-/* // Wait for the showDesc modal to close before opening another to install plugin
-function checkForPluginInstallRequested() {
-	var pluginURL = $.cookie("ca_installPluginURL");
-	var language = $.cookie("ca_languageSwitch");
-	var profile = $.cookie("ca_profile");
-	
-	if ( pluginURL ) {
-		pluginInstallIntervalTimer = setInterval(modalPluginInstall,100);
-	}
-	if (profile) {
-		showRepoIntervalTimer = setInterval(modalShowRepo,100);
-	}
-	if ( language ) {
-		CAswitchLanguage(language);
-	}
-} */
-
-/* function modalShowRepo() {
-	if ( ! $("#sb-container").is(":visible") ) {
-		clearInterval(showRepoIntervalTimer);
-		var profile = $.cookie("ca_profile");
-		$.removeCookie("ca_profile");
-		showDesc_openBox("/plugins/community.applications/scripts/showRepo.php?repository="+profile,profile,450,650,true,"afterRepoPopUp();");
-	}
-} */
-	
-/* function modalPluginInstall() {
-	if ( ! $("#sb-container").is(":visible") ) {
-		clearInterval(pluginInstallIntervalTimer);
-		var pluginURL = $.cookie("ca_installPluginURL");
-		$.removeCookie("ca_installPluginURL");
-		if ( pluginURL.toLowerCase().indexOf("http") !== 0 ) { // not a URL, so assume its a country code
-		  updateLanguage(pluginURL);
-		} else {
-			if ( pluginURL.indexOf(".xml") > 1 ) {
-				var language = pluginURL.basename().replace(".xml","");
-				installLanguage(pluginURL,language);
-			} else {
-				installPlugin(pluginURL);
-			}
-		}
-	}
-} */
 
 function showSpecialCategory(button) {
 	$(".caMenuItem").removeClass("selectedMenu");
@@ -1406,16 +1357,14 @@ function installMulti() {
 }
 
 function updateDisplay(data) {
-	$("#templates_content").fadeOut(function() {
-		$("#templates_content").html(data).fadeIn(function(){
+		$("#templates_content").html(data);
 			setToolTip();
 			enableSearch();
 			$('img').on("error",function() {
 				$(this).attr('src',"/plugins/dynamix.docker.manager/images/question.png");
 			});
 			myCloseAlert();
-		});
-	});
+		
 	saveState();
 }
 

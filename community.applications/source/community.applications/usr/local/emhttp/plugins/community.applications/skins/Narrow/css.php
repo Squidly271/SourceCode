@@ -69,7 +69,7 @@ switch ($theme) {
 }
 ?>
 body.stop-scrolling{height:100%;overflow:auto}  /* disable SweetAlert killing the scroll bar ( stops the wiggle ) */
-.popupHolder{max-height:350px;}
+.popupHolder,.tooltipster-box {max-height:460px;}
 .sweet-overlay{background-color:rgba(0, 0, 0, 0) !important;} /* don't dim if spinner is displayed */
 .popupTable{font-size:1.5rem;width:45rem;margin-top:0px;margin-left:auto;}
 .popupTable td {width:30%;text-align:left;}
@@ -313,4 +313,3 @@ a.appIconsPopUp { text-decoration:none;color:inherit;}
 .awesomplete mark {background: hsl(65, 100%, 50%);}
 .awesomplete li:hover mark {background: hsl(68, 100%, 41%);}
 .awesomplete li[aria-selected="true"] mark {background: hsl(86, 100%, 21%);color: inherit;}
-.tooltipster-box {max-height:350px;}

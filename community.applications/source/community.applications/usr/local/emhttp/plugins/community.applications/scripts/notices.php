@@ -10,6 +10,7 @@ $docroot = $docroot ?? $_SERVER['DOCUMENT_ROOT'] ?: "/usr/local/emhttp";
 require_once "$docroot/plugins/dynamix.docker.manager/include/DockerClient.php";
 require_once "$docroot/plugins/dynamix.plugin.manager/include/PluginHelpers.php";
 require_once "$docroot/plugins/dynamix/include/Wrappers.php";
+require_once "$docroot/plugins/community.applications/include/helpers.php";
 
 $paths['notices_remote'] = "https://raw.githubusercontent.com/Squidly271/CA_notifications/master/CA_notices.json";
 $paths['CA_root']        = "/tmp/ca_notices";
@@ -40,9 +41,8 @@ if ( ! $action ){
 if ( is_file("/var/run/dockerd.pid") && is_dir("/proc/".@file_get_contents("/var/run/dockerd.pid")) ) {
 	$dockerRunning = true;
 	$DockerClient = new DockerClient();
-} else {
+} else
 	$dockerRunning = false;
-}
 
 function debug($message) {
 	global $debugging;
@@ -50,51 +50,16 @@ function debug($message) {
 	if ($debugging) echo $message;
 }
 
-
-function readJsonFile($filename) {
-	$json = json_decode(@file_get_contents($filename),true);
-	return is_array($json) ? $json : array();
-}
-function writeJsonFile($filename,$jsonArray) {
-	file_put_contents($filename,json_encode($jsonArray, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
-}
-function download_url($url, $path = "", $bg = false, $timeout = 45) {
-	$ch = curl_init();
-	curl_setopt($ch,CURLOPT_URL,$url);
-	curl_setopt($ch,CURLOPT_FRESH_CONNECT,true);
-	curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
-	curl_setopt($ch,CURLOPT_CONNECTTIMEOUT,15);
-	curl_setopt($ch,CURLOPT_TIMEOUT,$timeout);
-	curl_setopt($ch,CURLOPT_ENCODING,"");
-	curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
-	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-	$out = curl_exec($ch);
-	curl_close($ch);
-	if ( $path )
-		file_put_contents($path,$out);
-
-	return $out ?: false;
-}
-function download_json($url,$path="") {
-	return json_decode(download_url($url,$path),true);
-}
-
-function startsWith($haystack, $needle) {
-	if ( !is_string($haystack) || ! is_string($needle) ) return false;
-	return $needle === "" || strripos($haystack, $needle, -strlen($haystack)) !== FALSE;
-}
-
 function conditionsMet($value) {
 	global $conditionsMet;
 
-	if ($value) {
+	if ($value)
 		debug("  Passed\n");
-	} else {
+	else {
 		$conditionsMet = false;
 		debug("  Failed\n");
 	}
 }
-
 
 ############## MAIN ##############
 switch ($action) {
@@ -121,23 +86,20 @@ switch ($action) {
 		if ( ! is_array($notices) ) $notices = array();
 		$dismissed = readJsonFile($paths['dismiss']);
 		foreach ( $notices as $app => $notice ) {
-			if ( in_array($notice['ID'],$dismissed) ) {
+			if ( in_array($notice['ID'],$dismissed) )
 				continue;
-			}
+
 			debug("Searching for $app");
 			$found = false;
 
-			if ( startsWith($app,"https://") || strtolower(pathinfo($app,PATHINFO_EXTENSION)) == "plg")  {
-				$plugin = true;
-			} else {
-				$plugin = false;
-			}
+			$plugin = ( startsWith($app,"https://") || strtolower(pathinfo($app,PATHINFO_EXTENSION)) == "plg");
+
 			if ( ! $plugin && $dockerRunning) {
 				$info = $DockerClient->getDockerContainers();
 				$search = explode(":",$app);
-				if ( ! $search[1] ) {
+				if ( ! $search[1] )
 					$app .= ":latest";
-				}
+				
 				foreach($info as $container) {
 					if ( $search[1] == "*" ) {
 						if ( explode(":",$container['Image'])[0] == $search[0])
@@ -155,9 +117,8 @@ switch ($action) {
 						if ( plugin("pluginURL","/var/log/plugins/".basename($app)) == $app) {
 							$found = true;
 						}
-					} else {
+					} else
 						$found = true;
-					}
 				}
 			}
 			if ( $found ) {

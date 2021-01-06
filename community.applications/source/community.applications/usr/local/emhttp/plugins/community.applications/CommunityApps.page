@@ -1357,13 +1357,13 @@ function installMulti() {
 }
 
 function updateDisplay(data) {
-		$("#templates_content").html(data);
-			setToolTip();
-			enableSearch();
-			$('img').on("error",function() {
-				$(this).attr('src',"/plugins/dynamix.docker.manager/images/question.png");
-			});
-			myCloseAlert();
+	$("#templates_content").html(data);
+	setToolTip();
+	enableSearch();
+	$('img').on("error",function() {
+		$(this).attr('src',"/plugins/dynamix.docker.manager/images/question.png");
+	});
+	myCloseAlert();
 		
 	saveState();
 }

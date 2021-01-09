@@ -32,6 +32,8 @@ switch ($theme) {
 		$hrColor = "#2b2b2b";
 		$borderColor = "#2b2b2b";
 		$watermarkColor = "rgba(43, 43, 43, 0.4)";
+		$tooltipsterBackground = "linear-gradient(90deg,#303030 0,#707070)";
+		$tooltipsterContent = "#f2f2f2";
 		break;
 	case 'white':
 		$donateBackground = "#1c1b1b";
@@ -40,6 +42,8 @@ switch ($theme) {
 		$hrColor = "lightgrey";
 		$borderColor = "lightgrey";
 		$watermarkColor = "rgba(211, 211, 211, 0.8)";
+		$tooltipsterBackground = "linear-gradient(90deg,#d2d2d2 0,#f2f2f2)";
+		$tooltipsterContent = "#101010";
 		break;
 	case 'azure':
 		$donateBackground = "#606e7f";
@@ -48,6 +52,8 @@ switch ($theme) {
 		$hrColor = "#606e7f";
 		$border = "#606e7f";
 		$watermarkColor = "rgba(96, 110, 127, 0.1)";
+		$tooltipsterBackground = "linear-gradient(90deg,#d2d2d2 0,#f2f2f2)";
+		$tooltipsterContent = "#101010";
 		break;
 	case 'gray':
 		$donateBackground = "#606e7f";
@@ -56,6 +62,8 @@ switch ($theme) {
 		$hrColor = "#606e7f";
 		$border = "#606e7f";
 		$watermarkColor = "rgba(96, 110, 127, 0.1)";
+		$tooltipsterBackground = "linear-gradient(90deg,#303030 0,#707070)";
+		$tooltipsterContent = "#f2f2f2";
 		break;
 // Use settings for black as a fallback
 	default:
@@ -68,7 +76,10 @@ switch ($theme) {
 		break;
 }
 ?>
+.tooltipster-box{background:<?=$tooltipsterBackground?>!important}
+.tooltipster-content{color:<?=$tooltipsterContent?>!important}
 body.stop-scrolling{height:100%;overflow:auto}  /* disable SweetAlert killing the scroll bar ( stops the wiggle ) */
+.sweet-alert table{margin-top:0px}
 .popupHolder,.tooltipster-box {max-height:460px;}
 .sweet-overlay{background-color:rgba(0, 0, 0, 0) !important;} /* don't dim if spinner is displayed */
 .popupTable{font-size:1.5rem;width:45rem;margin-top:0px;margin-left:auto;}
@@ -127,7 +138,7 @@ li.debugging {cursor:pointer;}
 .selectedMenu {color:<?=$unRaid66color?>;font-weight:bold;}
 .hoverMenu {color:<?=$unRaid66color?>;}
 table {background-color:transparent;}
-table tbody td {line-height:1.4rem;}
+table tbody td {line-height:1.8rem;}
 .startup-icon {color:lightblue;font-size:1.5rem;cursor:pointer;}
 .ca_serverWarning {color:#cecc31}
 .ca_template_icon {color:#606E7F;width:37rem;float:left;display:inline-block;background-color: #C7C5CB;margin:0px 0px 0px 0px;height:15rem;padding-top:1rem;}

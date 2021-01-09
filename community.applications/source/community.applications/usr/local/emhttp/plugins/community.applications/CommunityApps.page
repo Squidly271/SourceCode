@@ -55,7 +55,7 @@ if ( $unRaid69B2 ) {
 			$swalBackground = "#1b1d1b";
 			break;
 		case 'white':
-			$swalBackground = "#f2f2f2";
+			$swalBackground = "#f0f0f0";
 			break;
 		default:
 			$swalBackground = "#1c1b1b"; // default to black
@@ -514,6 +514,7 @@ function setToolTip() {
 	$('.ca_tooltip-warning').tooltipster({
 		contentAsHTML:true,
 		interactive:true,
+		multiple:true,
 		trigger:'custom',
 		triggerOpen:{click: true, mouseenter: true},
 		triggerClose:{click:true,scroll:true,mouseleave:true}
@@ -536,6 +537,10 @@ function setToolTip() {
 			post({action:'getRepoDescription',repository:repository},function(data) {
 				origin.tooltipster("content",data.description);
 			});
+		},
+		functionAfter: function(helper) {
+			var origin = $(helper.origin);
+			origin.tooltipster("hide");
 		}
 	});
 	
@@ -567,7 +572,8 @@ function setToolTip() {
 				
 			});
 		},
-		functionAfter: function(origin) {
+		functionAfter: function(helper) {
+			var origin = $(helper.origin);
 			origin.tooltipster("hide");
 		}
 	});
@@ -1107,7 +1113,7 @@ function checkPLGupdate() {
 function pinApp(button,repository,name) {
 	$(button).toggleClass("pinned unpinned");
 	var pinned = ( $(button).hasClass("unpinned") ) ? "<?tr("Click to pin this application")?>" : "<?tr("Click to unpin this application")?>";
-	$(button).tooltipster('content',pinned);
+	$(button).attr('title',pinned);
 	post({action:'pinApp',repository:repository,name:name});
 }
 

@@ -10,7 +10,7 @@ $endapp = count($templates);
 
 for ($i = 1; $i<50;$i++ ) {
 	$template = $templates[$index];
-	if ($template['Blacklist'] || $template['BranchID'] || $template['Plugin']) { $index++; continue; }
+	if ($template['Blacklist'] || $template['BranchID'] || $template['Plugin'] || !$template['Repository']) { $index++; continue; }
 	echo "Pulling {$template['Repository']}\n";
 	exec("timeout -s9 5 docker pull {$template['Repository']}",$output,$error);
 	if ( $error && $error != 9 ) {

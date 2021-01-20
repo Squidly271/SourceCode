@@ -50,6 +50,7 @@ $master_Categories = array(
 	array("Cat" => "Backup:","Des" => "Backup"),
 	array("Cat" => "Cloud:","Des" => "Cloud"),
 	array("Cat" => "Downloaders:","Des" => "Downloaders"),
+	array("Cat" => "Drivers:", "Des" => "Drivers"),
 	array("Cat" => "GameServers:","Des" => "Game Servers"),
 	array("Cat" => "HomeAutomation:","Des" => "Home Automation"),
 	array("Cat" => "MediaApp:", "Des"=>"Media Applications", "Sub" => array(
@@ -79,7 +80,8 @@ $master_Categories = array(
 		array("Cat" => "Network:Web","Des" => "Web"),
 		array("Cat" => "Network:Other","Des" => "Other")
 		)
-	),	
+	),
+	array("Cat" => "Plugins:", "Des" => "Plugins"),
 	array("Cat" => "Productivity:", "Des" => "Productivity"),
 	array("Cat" => "Security:", "Des" => "Security"),
 	array("Cat" => "Tools:","Des"=>"Tools / Utilities", "Sub" => array(
@@ -88,9 +90,7 @@ $master_Categories = array(
 		array("Cat" => "Tools:Utilities", "Des" => "Utilities")
 		)
 	),
-	array("Cat" => "Other:", "Des" => "Other"),
-	array("Cat" => "Plugins:", "Des" => "Plugins"),
-	array("Cat" => "Drivers:", "Des" => "Drivers")
+	array("Cat" => "Other:", "Des" => "Other")
 );
 
 function categoryJson() {

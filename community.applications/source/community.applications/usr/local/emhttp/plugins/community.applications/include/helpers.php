@@ -350,7 +350,7 @@ function filterMatch($filter,$searchArray,$exact=true) {
 	$filterwords = explode(" ",$filter);
 	foreach ( $filterwords as $testfilter) {
 		foreach ($searchArray as $search) {
-			if ( stripos(str_replace(" ","",$search),$testfilter) !== false ) {
+			if ( stripos($search,$testfilter) !== false ) {
 				$foundword++;
 				break;
 			}

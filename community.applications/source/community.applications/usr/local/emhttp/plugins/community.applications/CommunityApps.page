@@ -680,7 +680,6 @@ function doSearch(button,newSearch) {
 
 	if ( button && ! filter) {
 		$("#searchBox").attr("placeholder","<?tr("Please enter search term")?>");
-		return;
 	} else {
 		$("#searchBox").attr("placeholder","<?tr("Search")?>");
 	}

@@ -270,7 +270,7 @@ function my_display_apps($file,$pageNumber=1,$selectedApps=false,$startup=false)
 				if ( $template['Private'] ) {
 					$template['display_author'] = "{$template['Author']} - {$template['RepoName']}";
 				} else {
-					$template['display_repoName'] = "<a class='ca_tooltip ca_repoPopup' title='".tr("Show Profile")."' data-repository='".htmlentities($template['RepoName'],ENT_QUOTES)."' data-appid='{$template['ID']}'>".$template['Repo']."</a>";
+					$template['display_repoName'] = "<a class='ca_tooltip ca_repoPopup' title='".tr("Show Profile")."' data-repository='".htmlentities($template['Repo'],ENT_QUOTES)."' data-appid='{$template['ID']}'>".$template['RepoName']."</a>";
 				}
 			} else {
 				$template['display_author'] = $template['Author'];

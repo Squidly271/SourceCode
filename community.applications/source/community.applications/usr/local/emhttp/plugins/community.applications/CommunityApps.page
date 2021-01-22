@@ -698,11 +698,7 @@ function doSearch(button,newSearch) {
 	} else if (button) {
 		clearSearchBox();
 		filter = '';
-	} else {
-		if (!filter) {
-			return;
-		}
-	}
+	} 
 
 	scrollToTop();
 	if (filter) {
@@ -845,6 +841,7 @@ function populateAutoComplete() {
 	post({action:'populateAutoComplete'},function(result) {
 		searchBoxAwesomplete.list = result.autocomplete;
 		searchBoxAwesomplete.maxItems = 20;
+		searchBoxAwesomplete.minChars = 3;
 		Awesomplete.$('#searchBox').removeEventListener('awesomplete-selectcomplete',awesompleteSearch);
 		Awesomplete.$('#searchBox').addEventListener('awesomplete-selectcomplete',awesompleteSearch);
 		searchBoxAwesomplete.close(); // otherwise it opens automatically during restore state

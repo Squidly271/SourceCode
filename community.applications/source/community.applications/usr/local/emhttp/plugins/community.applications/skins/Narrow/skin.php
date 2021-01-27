@@ -268,9 +268,9 @@ function my_display_apps($file,$pageNumber=1,$selectedApps=false,$startup=false)
 
 			if ( $template['RepoName'] ) {
 				if ( $template['Private'] ) {
-					$template['display_author'] = "{$template['Author']} - {$template['RepoName']}";
+					$template['display_author'] = "{$template['Author']} - {$template['RepoName_highlighted']}";
 				} else {
-					$template['display_repoName'] = "<a class='ca_tooltip ca_repoPopup' title='".tr("Show Profile")."' data-repository='".htmlentities($template['Repo'],ENT_QUOTES)."' data-appid='{$template['ID']}'>".$template['RepoName']."</a>";
+					$template['display_repoName'] = "<a class='ca_tooltip ca_repoPopup' title='".tr("Show Profile")."' data-repository='".htmlentities($template['Repo'],ENT_QUOTES)."' data-appid='{$template['ID']}'>".$template['RepoName_highlighted']."</a>";
 				}
 			} else {
 				$template['display_author'] = $template['Author'];

@@ -230,7 +230,7 @@ case 'get_content':
 				$template['Description'] = highlight($filter, $template['Description']);
 				$template['Author'] = highlight($filter, $template['Author']);
 				$template['CardDescription'] = highlight($filter,$template['CardDescription']);
-				$template['RepoName'] = highlight($filter,$template['RepoName']);
+				$template['RepoName_highlighted'] = highlight($filter,$template['RepoName']);
 				if ($template['Language']) {
 					$template['Language'] = highlight($filter,$template['Language']);
 					$template['LanguageLocal'] = highlight($filter,$template['LanguageLocal']);

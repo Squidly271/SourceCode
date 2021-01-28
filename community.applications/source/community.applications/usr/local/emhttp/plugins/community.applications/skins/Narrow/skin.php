@@ -100,6 +100,7 @@ function my_display_apps($file,$pageNumber=1,$selectedApps=false,$startup=false)
 				$template['CardDescription'] = tr("No description present");
 			}
 			$template['bio'] = strip_tags(markdown($template['bio']));
+			
 			$template['display_dockerName'] = $template['RepoName'];
 
 			$template['display_DonateImage'] = $template['DonateLink'] ? "<a class='ca_tooltip donateLink donate' href='{$template['DonateLink']}' target='_blank' title='{$template['DonateText']}'>".tr("Donate")."</a>" : "";
@@ -142,6 +143,7 @@ function my_display_apps($file,$pageNumber=1,$selectedApps=false,$startup=false)
 			$appName = str_replace(" ","",$template['SortName']);
 			$ID = $template['ID'];
 			$template['ModeratorComment'] .= $template['CAComment'];
+			$template['RepoName_highlighted'] = $template['RepoName_highlighted'] ?: $template['RepoName'];
 
 			$selected = appInstalled($template,$info);
 			$selected = $template['Uninstall'] ? true : $selected;

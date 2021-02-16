@@ -634,11 +634,20 @@ function moderateTemplate($template,$moderation,$repositories) {
 		$statistics['fixedTemplates'][$template['Repo']][$template['Repository']][] = "Multiple Icons found";
 		unset($template['Icon']);
 	}
+	if ( startswith($template['IconFA'],"fa-") ) { // Due to SimonF
+		$template['IconFA'] = str_replace("fa-","",$template['IconFA']);
+		$statistics['fixedTemplates'][$template['Repo']][$template['Repository']][] = "Icon listed is fa-{$template['IconFA']}.  Changed to {$template['IconFA']}";
+	}
 
 	if ( ! $template['Plugin'] && $template['Name'] !== str_replace(" ","-",$template['Name']) ) {
 //		$statistics['caFixed']++;
 //		$statistics['fixedTemplates'][$template['Repo']][$template['Repository']][] = "Name contains a space.  Replacing with a &quot;=&quot;";
 		$template['Name'] = str_replace(" ","-",$template['Name']);
+	}
+	if ( is_array($template['ExtraSearchTerms']) ) {
+		$statistics['ca_fixed']++;
+		$statistics['fixedTemplates'][$template['Repo']][$template['Repository']][] = "Multiple ExtraSearchTerms entries.  Only 1 is used.  Separate the terms with spaces";
+		unset($template['ExtraSearchTerms']);
 	}
 	if ( $template['Icon'] ) {
 		$filename = $appPaths['iconHTTPSbase'].strtolower(str_replace(":","",$template['Repository'])."/".pathinfo($template['Icon'],PATHINFO_BASENAME));
@@ -707,11 +716,11 @@ function moderateTemplate($template,$moderation,$repositories) {
 				}
 				$flag = false;
 				foreach ($allConfigs as $config) {
-					if ( $matches[1] == $config['@attributes']['Target'] ) {
+					if ( $matches[1] == $config['@attributes']['Target'] && $config['@attributes']['Type'] == "Port") {
 						$flag = true;
 						break;
 					} else {
-						if ( $matches[1] == $config['@attributes']['Default'] ){
+						if ( $matches[1] == $config['@attributes']['Default'] && $config['@attributes']['Type'] == "Port" ){
 							$replacePort = $config['@attributes']['Target'];
 						}
 					}

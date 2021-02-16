@@ -658,12 +658,16 @@ function moderateTemplate($template,$moderation,$repositories) {
 			$filename = strstr($filename,"?",true);
 		}
 		@unlink($appPaths['iconTMP']);
-		$effectiveURL = download_url(str_replace("http://","https://",$template['Icon']),$appPaths['iconTMP']);
+		# tired of how slow the feed runs because of having to check every damn icon
+		# Just set them all to be https and let the maintainers deal with it.
+		
+		$template['Icon'] = str_replace("http://","https://",$template['Icon']); 
+/* 		$effectiveURL = download_url(str_replace("http://","https://",$template['Icon']),$appPaths['iconTMP']);
 		if ( ! $effectiveURL ) {
 			$effectiveURL = download_url($template['Icon'],$appPaths['iconTmp']);
 		} else {
 			$template['Icon'] = $effectiveURL;
-		}
+		} */
 		
 # tired of apps coming and going with the IconURL as sites hosting are shit
 /* 		if ( $effectiveURL === false) {
@@ -671,15 +675,15 @@ function moderateTemplate($template,$moderation,$repositories) {
 				unset($template['Icon']);
 			}
 		} */
-		if (pathinfo($filename,PATHINFO_EXTENSION) !== "svg") {
+/* 		if (pathinfo($filename,PATHINFO_EXTENSION) !== "svg") {
 			if ( ! @getimagesize($appPaths['iconTMP']) ) {
 				@unlink($appPaths['iconTMP']);
 				unset($template['Icon']);
 			}
-		}
+		} */
 	}
 
-	if ( $template['Icon']) {
+/* 	if ( $template['Icon']) {
 		$template['IconHTTPS'] = str_replace($appPaths['iconHTTPSbase'],"",$filename);
 
 		if ( startsWith($effectiveURL,"https") && startsWith($template['Icon'],"https") ) {
@@ -693,7 +697,7 @@ function moderateTemplate($template,$moderation,$repositories) {
 				copy($appPaths['iconTMP'],$filename);
 			}
 		}
-	}
+	} */
 	
 	// see if hard coded IP address for webuiUI
 	
